@@ -1,4 +1,4 @@
-const PRICE_USD = 10;
+const PRICE_USD = 30;
 const WORKER_URL = "https://crypto-pay-worker.bijamalala.workers.dev/check";
 
 const wallets = {
