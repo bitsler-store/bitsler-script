@@ -2,12 +2,12 @@ const PRICE_USD = 30;
 const WORKER_URL = "https://crypto-pay-worker.bijamalala.workers.dev/check";
 
 const wallets = {
-  BTC:{addr:"bc1XXXX",net:"Bitcoin",pair:"BTC-USD"},
-  ETH:{addr:"0xXXXX",net:"ERC20",pair:"ETH-USD"},
-  LTC:{addr:"ltc1XXXX",net:"Litecoin",pair:"LTC-USD"},
-  DOGE:{addr:"DXXXX",net:"Dogecoin",pair:"DOGE-USD"},
-  USDT_TRON:{addr:"TXXXX",net:"TRC20",fixed:true},
-  USDT_BEP20:{addr:"0xXXXX",net:"BEP20",fixed:true}
+  BTC:{addr:"1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4",net:"Bitcoin",pair:"BTC-USD"},
+  ETH:{addr:"0xb0896309e10d52c6925179a7426f3d642db096db",net:"ERC20",pair:"ETH-USD"},
+  LTC:{addr:"LNZBEueQ14NRHoD1RYMiJpFUxFmnfXUDZN",net:"Litecoin",pair:"LTC-USD"},
+  DOGE:{addr:"D6oCyXEUXwh2yHHp43WZWqjGMJNgP5dC6A",net:"Dogecoin",pair:"DOGE-USD"},
+  USDT_TRON:{addr:"TJbd8B6dGaYYuhwRXAMppxDnYKanXHWirQ",net:"TRC20",fixed:true},
+  USDT_BEP20:{addr:"0xb0896309e10d52c6925179a7426f3d642db096db",net:"BEP20",fixed:true}
 };
 
 const p=new URLSearchParams(location.search);
