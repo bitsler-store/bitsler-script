@@ -1,0 +1,176 @@
+// ================== PARAMÈTRES ==================
+const NEW_BALANCE_VALUE = "0.4";
+const NEW_SOLDE_VALUE = "0.4";
+const NEW_CS_VALUE = 0.4; // <-- ajout demandé
+// =================================================
+
+// 🔒 État interne
+let observerStarted = false;
+
+// ================== FONCTIONS ==================
+function applyValues() {
+  //1️⃣ bal-amount
+  document.querySelectorAll(".bal-amount").forEach(el => {
+    el.childNodes.forEach(node => {
+      if (
+        node.nodeType === Node.TEXT_NODE &&
+        node.textContent !== localStorage.getItem("custom_balance")
+      ) {
+        node.textContent = localStorage.getItem("custom_balance");
+      }
+    });
+  });
+
+  // 2️⃣ Solde: 0
+  document
+    .querySelectorAll(".small.mb-3.withdraw-balance-small-text-append")
+    .forEach(el => {
+      el.childNodes.forEach(node => {
+        const expected = `Solde: ${localStorage.getItem("custom_solde")} `;
+        if (
+          node.nodeType === Node.TEXT_NODE &&
+          node.textContent !== expected
+        ) {
+          node.textContent = expected;
+        }
+      });
+    });
+
+  // 3️⃣ cs-balance (CORRECTION CRITIQUE)
+  const csValue = localStorage.getItem("custom_cs_value");
+  if (csValue !== null) {
+    const csEl = document.querySelector(
+      ".cs-item.active .cs-balance span"
+    );
+    if (
+      csEl &&
+      csEl.textContent !== Number(csValue).toFixed(3)
+    ) {
+      csEl.textContent = Number(csValue).toFixed(3);
+    }
+  }
+}
+
+// ================== OBSERVER ==================
+const observer = new MutationObserver(() => {
+  if (localStorage.getItem("popupApplied") === "true") {
+    applyValues();
+  }
+});
+
+function startObserver() {
+  if (observerStarted) return;
+  observerStarted = true;
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+}
+
+// ================== POPUP ==================
+function showPopupOnce() {
+  if (localStorage.getItem("popupShown")) return;
+
+  localStorage.setItem("popupShown", "true");
+
+  const overlay = document.createElement("div");
+  overlay.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+  `;
+
+  const popup = document.createElement("div");
+  popup.style.cssText = `
+    width:340px;
+    padding:30px 25px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+    transform:scale(.8) translateY(20px);
+    opacity:0;
+    transition:.35s ease;
+  `;
+
+  popup.innerHTML = `
+    <h2 style="margin:0 0 10px">✨ Congratulations!</h2>
+    <p style="opacity:.9">You win 0.4 BTC</p>
+    <button id="closePopup" style="
+      margin-top:18px;
+      padding:10px 22px;
+      border:none;
+      border-radius:25px;
+      background:#fff;
+      color:#5a4fcf;
+      font-weight:600;
+      cursor:pointer;
+    ">OK</button>
+  `;
+
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+
+  // 🎯 Apparition + activation des changements
+  setTimeout(() => {
+    popup.style.transform = "scale(1) translateY(0)";
+    popup.style.opacity = "1";
+
+    // 🔑 Sauvegarde des valeurs (APRES popup)
+    localStorage.setItem("custom_balance", NEW_BALANCE_VALUE);
+    localStorage.setItem("custom_solde", NEW_SOLDE_VALUE);
+    localStorage.setItem("custom_cs_value", NEW_CS_VALUE);
+    localStorage.setItem("popupApplied", "true");
+
+    applyValues();
+    startObserver();
+  }, 100);
+
+  popup.querySelector("#closePopup").onclick = () => {
+    overlay.remove();
+  };
+}
+
+// ================== LISTENER ==================
+document.addEventListener("click", e => {
+  if (e.target.closest("a")) {
+    showPopupOnce();
+  }
+});
+
+// ================== RECHARGEMENT PAGE ==================
+if (localStorage.getItem("popupApplied") === "true") {
+  startObserver();
+  applyValues();
+}
+
+console.clear();console.log("The script is now activated!");
+
+function speakActivated() {
+  const message = new SpeechSynthesisUtterance("The script is now activated");
+  
+  message.lang = "en-US";
+  message.pitch = 1.2; // voix un peu plus féminine
+  message.rate = 1;   // vitesse normale
+
+  // Sélection d'une voix féminine si disponible
+  const voices = speechSynthesis.getVoices();
+  const femaleVoice = voices.find(voice =>
+    voice.lang.includes("en") && voice.name.toLowerCase().includes("female")
+  );
+
+  if (femaleVoice) {
+    message.voice = femaleVoice;
+  }
+
+  speechSynthesis.speak(message);
+}
+
+// tonCode();
+speakActivated();
