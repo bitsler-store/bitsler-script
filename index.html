@@ -6,15 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
 <style>
-/* Boutons crypto avec logos */
 .crypto-btn {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 20px;
-  margin: 10px auto; /* centré horizontalement */
+  margin: 10px auto; /* centré */
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -22,35 +20,24 @@
   font-size: 16px;
   transition: transform 0.2s, box-shadow 0.2s;
   justify-content: flex-start;
-  max-width: 300px; /* limite la largeur pour centrage propre */
+  max-width: 300px;
 }
-.crypto-btn img { width: 28px; height: 28px; }
-.crypto-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
-
-/* Couleurs par crypto */
-.crypto-BTC { background: #f7931a; color: #fff; }
-.crypto-ETH { background: #3c3c3d; color: #fff; }
-.crypto-LTC { background: #bebebe; color: #0f172a; }
-.crypto-DOGE { background: #c2a633; color: #0f172a; }
-.crypto-USDT_TRON { background: #26a17b; color: #fff; }
-.crypto-USDT_BEP20 { background: #26a17b; color: #fff; }
-
-/* Container pour centrer le contenu */
-.container { text-align: center; }
+.crypto-btn img { width:28px; height:28px; }
+.crypto-btn:hover { transform: translateY(-2px); box-shadow:0 6px 12px rgba(0,0,0,0.15);}
+.crypto-BTC { background:#f7931a;color:#fff; }
+.crypto-ETH { background:#3c3c3d;color:#fff; }
+.crypto-LTC { background:#bebebe;color:#0f172a; }
+.crypto-DOGE { background:#c2a633;color:#0f172a; }
+.crypto-USDT_TRON { background:#26a17b;color:#fff; }
+.crypto-USDT_BEP20 { background:#26a17b;color:#fff; }
+.container { text-align:center; }
 </style>
-
 </head>
 <body>
 <div class="container">
-
-  <h1>Bitsler Script 0.4 BTC</h1>
-
-  <p>
-    Purchase this script for Bitsler if you want to instantly earn 0.4 BTC.
-  </p>
-
-  <div class="price">$30 USD</div>
-
+  <h1>Premium Digital File</h1>
+  <p>Get instant access to a high-value digital TXT file. Secure crypto payment, immediate delivery.</p>
+  <div class="price">$10 USD</div>
   <ul style="text-align:center;color:#475569;font-size:14px;">
     <li>✔ Instant delivery after payment</li>
     <li>✔ Secure crypto payment</li>
@@ -63,32 +50,32 @@
 
   <p class="small" style="margin-top:16px;">Choose your cryptocurrency:</p>
 
-  <button type="button" class="crypto-btn crypto-BTC" onclick="startPayment('BTC')">
+  <button class="crypto-btn crypto-BTC" onclick="startPayment('BTC')">
     <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023" alt="BTC"> Bitcoin (BTC)
   </button>
-  <button type="button" class="crypto-btn crypto-ETH" onclick="startPayment('ETH')">
+  <button class="crypto-btn crypto-ETH" onclick="startPayment('ETH')">
     <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023" alt="ETH"> Ethereum (ETH)
   </button>
-  <button type="button" class="crypto-btn crypto-LTC" onclick="startPayment('LTC')">
+  <button class="crypto-btn crypto-LTC" onclick="startPayment('LTC')">
     <img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023" alt="LTC"> Litecoin (LTC)
   </button>
-  <button type="button" class="crypto-btn crypto-DOGE" onclick="startPayment('DOGE')">
+  <button class="crypto-btn crypto-DOGE" onclick="startPayment('DOGE')">
     <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023" alt="DOGE"> Dogecoin (DOGE)
   </button>
-  <button type="button" class="crypto-btn crypto-USDT_TRON" onclick="startPayment('USDT_TRON')">
+  <button class="crypto-btn crypto-USDT_TRON" onclick="startPayment('USDT_TRON')">
     <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023" alt="USDT TRC20"> USDT (TRC20)
   </button>
-  <button type="button" class="crypto-btn crypto-USDT_BEP20" onclick="startPayment('USDT_BEP20')">
+  <button class="crypto-btn crypto-USDT_BEP20" onclick="startPayment('USDT_BEP20')">
     <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023" alt="USDT BEP20"> USDT (BEP20)
   </button>
 
-  <p class="small" style="margin-top:16px;">Payments go directly to our secure wallet.</p>
+  <p class="small center" style="margin-top:16px;">Payments go directly to our secure wallet.</p>
 </div>
 
 <script>
 function startPayment(crypto){
   const email = document.getElementById("email").value.trim();
-  if(!email){ alert("Email required"); return; }
+  if(!email){ alert("Email is required"); return; }
   if(!email.includes("@")){ alert("Enter a valid email"); return; }
   window.location.href = `pay.html?c=${encodeURIComponent(crypto)}&e=${encodeURIComponent(email)}`;
 }
