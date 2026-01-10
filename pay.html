@@ -3,35 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <title>Crypto Payment</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-<style>
-body{font-family:'Inter',sans-serif;background:#f9fafb;color:#111;margin:0;padding:0;}
-.container{max-width:400px;margin:auto;padding:20px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.05);}
-h1{font-weight:800;margin-bottom:10px;}
-.crypto-logo{width:50px;height:50px;margin-bottom:10px;}
-.box{background:#f3f4f6;padding:12px;border-radius:8px;margin:10px 0;word-break:break-all;}
-.price{font-size:22px;font-weight:600;margin:10px 0;color:#111;}
-.timer{font-size:20px;font-weight:700;color:#d33;margin-top:15px;}
-.btn{padding:12px 20px;font-size:16px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;background:#2563eb;color:#fff;}
-.btn:hover{background:#1d4ed8;}
-img#qrCode{margin:15px 0;}
-</style>
 </head>
 <body>
-<div class="container">
-  <img id="cryptoLogo" class="crypto-logo" src="" alt="Crypto Logo">
-  <h1 id="cryptoName">Payment</h1>
-  <p><strong>Order ID:</strong> <span id="orderId"></span></p>
-  <p><strong>Email:</strong> <span id="emailClient"></span></p>
-  <div id="amountCrypto" class="price"></div>
-  <p><strong>Send to this address:</strong></p>
-  <div class="box" id="walletAddress"></div>
-  <button class="btn" onclick="copyAddress()">Copy address</button>
-  <p><strong>Scan QR code:</strong></p>
-  <img id="qrCode" width="200" height="200" alt="QR Code">
-  <p id="networkInfo"></p>
-  <p class="timer">Time remaining: <span id="timer">15:00</span></p>
+
+<div class="box">
+  <h2 id="title">Payment</h2>
+
+  <p>Order ID:<br><strong id="orderId"></strong></p>
+
+  <p id="amount"></p>
+
+  <p><strong>Send to address:</strong></p>
+  <p id="address"></p>
+
+  <img id="qr" src="" width="200">
+
+  <p class="timer">
+    Time left: <span id="timer">15:00</span>
+  </p>
 </div>
 
 <script src="script.js"></script>
