@@ -4,68 +4,36 @@
 <meta charset="UTF-8">
 <title>Admin Dashboard</title>
 <link rel="stylesheet" href="style.css">
-<style>
-table {width:100%; border-collapse: collapse; background:#16161d;}
-th, td {padding:8px; border:1px solid #333; text-align:center; color:#fff;}
-th {background:#0e0e12;}
-tr:nth-child(even) {background:#1a1a28;}
-</style>
 </head>
 <body>
+
 <div class="box" id="loginBox">
-  <h2>Admin Access</h2>
-  <input type="password" id="pin" placeholder="Enter admin PIN">
-  <button onclick="login()">Unlock</button>
+  <h2>Accès administrateur</h2>
+  <input type="password" id="pin" placeholder="Code PIN admin">
+  <button onclick="login()">Déverrouiller</button>
 </div>
 
 <div class="box" id="adminBox" style="display:none;">
-  <h2>Admin Dashboard</h2>
+  <h2>Commandes</h2>
   <table id="ordersTable">
     <thead>
       <tr>
         <th>Order ID</th>
         <th>Email</th>
         <th>Crypto</th>
-        <th>Amount USD</th>
+        <th>USD</th>
         <th>Status</th>
         <th>TXID</th>
         <th>IP</th>
-        <th>Country</th>
-        <th>Created At</th>
-        <th>Paid At</th>
+        <th>Pays</th>
+        <th>Créé</th>
+        <th>Payé</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 </div>
 
-<script>
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
-
-async function loadOrders(){
-  const resp = await fetch(`${WORKER_URL}/admin/orders`);
-  const orders = await resp.json();
-  const tbody = document.querySelector("#ordersTable tbody");
-  tbody.innerHTML = "";
-  orders.forEach(o=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${o.orderId}</td>
-      <td>${o.email}</td>
-      <td>${o.crypto}</td>
-      <td>${o.amountUSD}</td>
-      <td>${o.status}</td>
-      <td>${o.txid || "-"}</td>
-      <td>${o.ip}</td>
-      <td>${o.country}</td>
-      <td>${o.createdAt ? new Date(o.createdAt).toLocaleString():"-"}</td>
-      <td>${o.paidAt ? new Date(o.paidAt).toLocaleString():"-"}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-loadOrders();
-</script>
+<script src="admin.js"></script>
 </body>
 </html>
