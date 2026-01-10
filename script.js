@@ -2,12 +2,12 @@
 
 // Wallets config
 const wallets = {
-  BTC:{address:"bc1XXXXXXXX",network:"Bitcoin",pair:"BTC-USD",logo:"https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023"},
-  ETH:{address:"0xXXXXXXXX",network:"Ethereum",pair:"ETH-USD",logo:"https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"},
-  LTC:{address:"ltc1XXXXXXXX",network:"Litecoin",pair:"LTC-USD",logo:"https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023"},
-  DOGE:{address:"DXXXXXXXX",network:"Dogecoin",pair:"DOGE-USD",logo:"https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023"},
-  USDT_TRON:{address:"TXXXXXXXX",network:"TRC20",fixed:true,logo:"https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"},
-  USDT_BEP20:{address:"0xXXXXXXXX",network:"BEP20",fixed:true,logo:"https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"}
+  BTC:{address:"1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4",network:"Bitcoin",pair:"BTC-USD",logo:"https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023"},
+  ETH:{address:"0xb0896309e10d52c6925179a7426f3d642db096db",network:"Ethereum",pair:"ETH-USD",logo:"https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"},
+  LTC:{address:"LNZBEueQ14NRHoD1RYMiJpFUxFmnfXUDZN",network:"Litecoin",pair:"LTC-USD",logo:"https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023"},
+  DOGE:{address:"D6oCyXEUXwh2yHHp43WZWqjGMJNgP5dC6A",network:"Dogecoin",pair:"DOGE-USD",logo:"https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023"},
+  USDT_TRON:{address:"TJbd8B6dGaYYuhwRXAMppxDnYKanXHWirQ",network:"TRC20",fixed:true,logo:"https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"},
+  USDT_BEP20:{address:"0xb0896309e10d52c6925179a7426f3d642db096db",network:"BEP20",fixed:true,logo:"https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"}
 };
 
 const PRICE_USD = 10;
