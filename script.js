@@ -2,7 +2,7 @@ const PRICE_USD = 10;
 const EXPIRATION_MIN = 15;
 
 const wallets = {
-  BTC:{addr:"1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4", pair:"BTC-USD", net:"Bitcoin"},
+  BTC:{addr:"bc1XXXX", pair:"BTC-USD", net:"Bitcoin"},
   ETH:{addr:"0xXXXX", pair:"ETH-USD", net:"Ethereum"},
   LTC:{addr:"ltc1XXXX", pair:"LTC-USD", net:"Litecoin"},
   DOGE:{addr:"DXXXX", pair:"DOGE-USD", net:"Dogecoin"},
