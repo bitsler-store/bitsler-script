@@ -2,22 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Payment Success</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Successful</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container" style="text-align:center;padding:20px;">
-  <h1>Payment Received!</h1>
-  <p>Your order has been confirmed.</p>
+<div class="box">
+  <h2>Payment Received!</h2>
+  <p>Thank you for your purchase.</p>
+  <p><strong>Email:</strong> <span id="email"></span></p>
   <p><strong>Order ID:</strong> <span id="orderId"></span></p>
-  <p><strong>Email:</strong> <span id="emailClient"></span></p>
-  <a id="downloadBtn" href="download.html" class="btn">Download your file</a>
+  <button id="downloadBtn">Download Your File</button>
 </div>
+
 <script>
 const params = new URLSearchParams(window.location.search);
-document.getElementById("orderId").textContent = params.get("oid") || "N/A";
-document.getElementById("emailClient").textContent = params.get("e") || "N/A";
+const email = params.get("email");
+const orderId = params.get("orderId");
+document.getElementById("email").innerText = email;
+document.getElementById("orderId").innerText = orderId;
+
+document.getElementById("downloadBtn").onclick = () => {
+  window.location.href = `download.html?orderId=${orderId}`;
+};
 </script>
 </body>
 </html>
