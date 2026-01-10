@@ -1,13 +1,75 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><title>Admin</title>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-</head><body>
+<style>
+body{font-family:'Inter',sans-serif;background:#f9fafb;margin:0;padding:0;color:#111;}
+.container{max-width:1000px;margin:auto;padding:20px;}
+h1{text-align:center;font-weight:800;margin-bottom:20px;}
+
+/* Tableau stylé et responsive */
+table{width:100%;border-collapse:collapse;margin:0 auto;table-layout:auto;}
+th,td{text-align:center;padding:12px;border:1px solid #ccc;font-size:14px;}
+th{background:#2563eb;color:#fff;font-weight:600;}
+tr:nth-child(even){background:#f3f4f6;}
+tr:hover{background:#e0f2fe;}
+
+/* Fond qui s’adapte au contenu */
+tbody{background:#fff;}
+</style>
+</head>
+<body>
 <div class="container">
-<h1>Dashboard Admin</h1>
-<table>
-<tr><th>Commande</th><th>Email</th><th>Crypto</th><th>Statut</th><th>Début</th><th>IP</th><th>Pays</th></tr>
-<tbody id="tb"></tbody>
-</table>
+  <h1>Dashboard Admin</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Email</th>
+        <th>Crypto</th>
+        <th>Status</th>
+        <th>Start Time</th>
+        <th>IP</th>
+        <th>Country</th>
+      </tr>
+    </thead>
+    <tbody id="ordersTable"></tbody>
+  </table>
 </div>
-<script src="admin.js"></script>
-</body></html>
+
+<script>
+// Fonction pour afficher toutes les commandes stockées
+const tbody = document.getElementById("ordersTable");
+
+// Parcourir toutes les clés localStorage qui commencent par "order_"
+Object.keys(localStorage)
+  .filter(k => k.startsWith("order_"))
+  .forEach(k=>{
+    const o = JSON.parse(localStorage.getItem(k));
+    if(!o) return;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${o.oid}</td>
+      <td>${o.email}</td>
+      <td>${o.crypto}</td>
+      <td>${o.status}</td>
+      <td>${new Date(o.start).toLocaleString()}</td>
+      <td>${o.ip || "?"}</td>
+      <td>${o.country || "?"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+// Ajuster la hauteur de tbody selon le contenu
+function adjustTableHeight(){
+  const table = document.querySelector("table");
+  const tbody = table.querySelector("tbody");
+  tbody.style.minHeight = "auto"; // laisse la hauteur s’adapter au contenu
+}
+adjustTableHeight();
+</script>
+</body>
+</html>
