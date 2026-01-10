@@ -15,10 +15,24 @@ function getParam(name){
 }
 
 function generateOrderId(){
-  return "ORD-" + Date.now();
+  return "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
 }
 
-(async function(){
+async function createOrder(order){
+  try {
+    const resp = await fetch(WORKER_URL + "/create-order", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(order)
+    });
+    return await resp.json();
+  } catch(e){
+    alert("Failed to create order. Backend issue.");
+    return null;
+  }
+}
+
+(function(){
   const crypto = getParam("crypto");
   const email = getParam("email");
 
@@ -32,43 +46,36 @@ function generateOrderId(){
   document.getElementById("title").innerText = `Pay with ${crypto}`;
   document.getElementById("orderId").innerText = orderId;
   document.getElementById("address").innerText = wallets[crypto];
-  document.getElementById("amount").innerText =
-    `Send exactly $${PRICE_USD} worth of ${crypto}`;
+  document.getElementById("amount").innerText = `Send exactly $${PRICE_USD} worth of ${crypto}`;
+  document.getElementById("qr").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallets[crypto]}`;
 
-  document.getElementById("qr").src =
-    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallets[crypto]}`;
-
-  // COPY ADDRESS BUTTON
+  // COPY ADDRESS
   document.getElementById("copyBtn").onclick = () => {
     navigator.clipboard.writeText(wallets[crypto])
       .then(()=>alert("Address copied!"))
       .catch(()=>alert("Copy failed"));
   };
 
-  // CREATE ORDER BACKEND
-  await fetch(WORKER_URL + "/create-order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      orderId,
-      email,
-      crypto,
-      network: crypto,
-      amountUSD: PRICE_USD
-    })
+  // CREATE ORDER IMMEDIATEMENT
+  createOrder({
+    orderId,
+    email,
+    crypto,
+    network: crypto,
+    amountUSD: PRICE_USD
   });
 
   // TIMER
-  let time = 900; // 15 minutes in seconds
+  let time = 900; // 15 min
   const timerEl = document.getElementById("timer");
 
   function updateTimer(){
-    const minutes = Math.floor(time/60);
-    const seconds = time % 60;
-    timerEl.innerText = `${minutes}:${String(seconds).padStart(2,"0")}`;
+    const m = Math.floor(time/60);
+    const s = time % 60;
+    timerEl.innerText = `${m}:${String(s).padStart(2,'0')}`;
   }
 
-  updateTimer(); // initial display
+  updateTimer(); // affiche timer dès le début
 
   const interval = setInterval(()=>{
     time--;
