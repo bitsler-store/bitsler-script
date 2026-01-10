@@ -2,12 +2,12 @@ const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev/";
 const PRICE_USD = 10;
 
 const wallets = {
-  BTC: "BTC_ADDRESS",
-  ETH: "ETH_ADDRESS",
-  LTC: "LTC_ADDRESS",
-  DOGE: "DOGE_ADDRESS",
-  USDT_TRC20: "TRON_ADDRESS",
-  USDT_BEP20: "BSC_ADDRESS"
+  BTC: "1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4",
+  ETH: "0xb0896309e10d52c6925179a7426f3d642db096db",
+  LTC: "LNZBEueQ14NRHoD1RYMiJpFUxFmnfXUDZN",
+  DOGE: "D6oCyXEUXwh2yHHp43WZWqjGMJNgP5dC6A",
+  USDT_TRC20: "TJbd8B6dGaYYuhwRXAMppxDnYKanXHWirQ",
+  USDT_BEP20: "0xb0896309e10d52c6925179a7426f3d642db096db"
 };
 
 function getParam(name){
