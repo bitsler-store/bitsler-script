@@ -2,130 +2,120 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Crypto Payment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-
-<!-- QRCode.js pour générer le QR côté client -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+body{font-family:'Inter',sans-serif;background:#f9fafb;color:#111;margin:0;padding:0;}
+.container{max-width:400px;margin:auto;padding:20px;text-align:center;}
+h1{font-weight:800;margin-bottom:10px;}
+.crypto-logo{width:50px;height:50px;margin-bottom:10px;}
+.box{background:#f3f4f6;padding:12px;border-radius:8px;margin:10px 0;word-break:break-all;}
+.price{font-size:22px;font-weight:600;margin:10px 0;color:#111;}
+.timer{font-size:20px;font-weight:700;color:#d33;margin-top:15px;}
+.btn{padding:12px 20px;font-size:16px;margin:10px 0;border:none;border-radius:8px;cursor:pointer;background:#2563eb;color:#fff;}
+.btn:hover{background:#1d4ed8;}
+img#qrCode{margin:15px 0;}
+</style>
 </head>
-
 <body>
-<div class="container center">
-
+<div class="container">
+  <img id="cryptoLogo" class="crypto-logo" src="" alt="Crypto Logo">
   <h1 id="cryptoName">Payment</h1>
-
   <p><strong>Order ID:</strong> <span id="orderId"></span></p>
   <p><strong>Email:</strong> <span id="emailClient"></span></p>
-
   <div id="amountCrypto" class="price"></div>
-
   <p><strong>Send to this address:</strong></p>
   <div class="box" id="walletAddress"></div>
-
   <button class="btn" onclick="copyAddress()">Copy address</button>
-
   <p><strong>Scan QR code:</strong></p>
-  <div id="qrCode" style="width:180px;height:180px;margin:auto;"></div>
-
+  <img id="qrCode" width="200" height="200" alt="QR Code">
   <p id="networkInfo"></p>
-
-  <p class="timer red">
-    Time remaining: <span id="timer">15:00</span>
-  </p>
-
+  <p class="timer">Time remaining: <span id="timer">15:00</span></p>
 </div>
 
 <script>
-// ===================== CONFIG =====================
 const PRICE_USD = 10;
 const EXPIRATION_MINUTES = 15;
 
+// Configuration des wallets avec logos et paire pour Coinbase API
 const wallets = {
-  BTC: { address: "1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4", network: "Bitcoin", pair: "BTC-USD" },
-  ETH: { address: "0xb0896309e10d52c6925179a7426f3d642db096db", network: "Ethereum", pair: "ETH-USD" },
-  LTC: { address: "LNZBEueQ14NRHoD1RYMiJpFUxFmnfXUDZN", network: "Litecoin", pair: "LTC-USD" },
-  DOGE:{ address: "D6oCyXEUXwh2yHHp43WZWqjGMJNgP5dC6A", network: "Dogecoin", pair: "DOGE-USD" },
-  USDT_TRON:{ address: "TJbd8B6dGaYYuhwRXAMppxDnYKanXHWirQ", network: "TRC20", fixed: true },
-  USDT_BEP20:{ address: "0xb0896309e10d52c6925179a7426f3d642db096db", network: "BEP20", fixed: true }
+  BTC:{address:"bc1XXXXXXXX",network:"Bitcoin",pair:"BTC-USD",logo:"https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023"},
+  ETH:{address:"0xXXXXXXXX",network:"Ethereum",pair:"ETH-USD",logo:"https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"},
+  LTC:{address:"ltc1XXXXXXXX",network:"Litecoin",pair:"LTC-USD",logo:"https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023"},
+  DOGE:{address:"DXXXXXXXX",network:"Dogecoin",pair:"DOGE-USD",logo:"https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023"},
+  USDT_TRON:{address:"TXXXXXXXX",network:"TRC20",fixed:true,logo:"https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"},
+  USDT_BEP20:{address:"0xXXXXXXXX",network:"BEP20",fixed:true,logo:"https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"}
 };
 
-// ===================== UTILS =====================
-function generateOrderId(){
-  return "ORD-"+Date.now()+"-"+Math.random().toString(36).substring(2,7);
-}
+function generateOrderId(){ return "ORD-"+Date.now()+"-"+Math.random().toString(36).substring(2,7); }
 
 async function getCryptoAmount(crypto){
   if(wallets[crypto].fixed) return PRICE_USD.toFixed(2);
   try{
     const r = await fetch(`https://api.coinbase.com/v2/prices/${wallets[crypto].pair}/spot`);
     const d = await r.json();
-    return (PRICE_USD / d.data.amount).toFixed(8);
-  }catch{
-    return PRICE_USD; // fallback si API ne répond pas
-  }
+    return (PRICE_USD/d.data.amount).toFixed(8);
+  }catch(e){ return "0.00000000"; }
 }
 
-// ===================== MAIN =====================
+async function getClientIP(){
+  try{
+    const r = await fetch('https://ipapi.co/json/');
+    return await r.json();
+  }catch(e){ return {ip:"?IP?",country_name:"?Country?"}; }
+}
+
 (async function(){
   const params = new URLSearchParams(window.location.search);
   const crypto = params.get("c");
   const email = params.get("e");
-
-  if(!crypto || !wallets[crypto] || !email){
-    window.location.href="index.html";
-    return;
-  }
+  if(!crypto||!wallets[crypto]||!email){ window.location.href="index.html"; return; }
 
   const orderId = generateOrderId();
+  const ipInfo = await getClientIP();
 
-  // Elements DOM
-  const cEl = document.getElementById("cryptoName");
-  const oidEl = document.getElementById("orderId");
-  const emailEl = document.getElementById("emailClient");
-  const addrEl = document.getElementById("walletAddress");
-  const netEl = document.getElementById("networkInfo");
-  const amtEl = document.getElementById("amountCrypto");
-  const timerEl = document.getElementById("timer");
-  const qrEl = document.getElementById("qrCode");
+  document.getElementById("cryptoName").textContent = crypto + " Payment";
+  document.getElementById("orderId").textContent = orderId;
+  document.getElementById("emailClient").textContent = email;
+  document.getElementById("walletAddress").textContent = wallets[crypto].address;
+  document.getElementById("networkInfo").textContent = "Network: "+wallets[crypto].network;
+  document.getElementById("cryptoLogo").src = wallets[crypto].logo;
 
-  // Affichage infos
-  cEl.textContent = crypto + " Payment";
-  oidEl.textContent = orderId;
-  emailEl.textContent = email;
-  addrEl.textContent = wallets[crypto].address;
-  netEl.textContent = "Network: " + wallets[crypto].network;
-
-  // Montant en crypto
   const amount = await getCryptoAmount(crypto);
-  amtEl.textContent = `Send exactly ${amount} ${crypto}`;
+  document.getElementById("amountCrypto").textContent = `Send exactly ${amount} ${crypto}`;
 
-  // QR CODE
-  qrEl.innerHTML = "";
-  new QRCode(qrEl, { text: wallets[crypto].address, width:180, height:180 });
+  document.getElementById("qrCode").src = "https://api.qr-code-generator.com/v1/create?size=200x200&data="+encodeURIComponent(wallets[crypto].address);
+
+  // Stockage local pour admin.html
+  localStorage.setItem("order_"+orderId, JSON.stringify({
+    oid:orderId,
+    email:email,
+    crypto:crypto,
+    start:Date.now(),
+    ip:ipInfo.ip,
+    country:ipInfo.country_name,
+    status:"pending"
+  }));
 
   // TIMER
-  let seconds = EXPIRATION_MINUTES * 60;
+  let seconds = EXPIRATION_MINUTES*60;
+  const timerEl = document.getElementById("timer");
   const interval = setInterval(()=>{
-    const m = Math.floor(seconds/60);
-    const s = seconds%60;
+    const m=Math.floor(seconds/60);
+    const s=seconds%60;
     timerEl.textContent = `${m}:${s.toString().padStart(2,"0")}`;
     seconds--;
-    if(seconds < 0){
-      clearInterval(interval);
-      window.location.href="expired.html";
-    }
+    if(seconds<0){ clearInterval(interval); window.location.href="expired.html"; }
   },1000);
 
 })();
 
-// ===================== COPY ADDRESS =====================
 function copyAddress(){
-  const addr = document.getElementById("walletAddress").textContent;
-  navigator.clipboard.writeText(addr);
-  alert("Wallet address copied!");
+  const text = document.getElementById("walletAddress").textContent;
+  navigator.clipboard.writeText(text);
+  alert("Wallet address copied");
 }
 </script>
-
 </body>
 </html>
