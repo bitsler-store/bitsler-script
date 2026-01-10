@@ -38,7 +38,14 @@ function generateOrderId(){
   document.getElementById("qr").src =
     `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallets[crypto]}`;
 
-  // Create order backend
+  // COPY ADDRESS BUTTON
+  document.getElementById("copyBtn").onclick = () => {
+    navigator.clipboard.writeText(wallets[crypto])
+      .then(()=>alert("Address copied!"))
+      .catch(()=>alert("Copy failed"));
+  };
+
+  // CREATE ORDER BACKEND
   await fetch(WORKER_URL + "/create-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -52,13 +59,25 @@ function generateOrderId(){
   });
 
   // TIMER
-  let time = 900;
-  setInterval(()=>{
+  let time = 900; // 15 minutes in seconds
+  const timerEl = document.getElementById("timer");
+
+  function updateTimer(){
+    const minutes = Math.floor(time/60);
+    const seconds = time % 60;
+    timerEl.innerText = `${minutes}:${String(seconds).padStart(2,"0")}`;
+  }
+
+  updateTimer(); // initial display
+
+  const interval = setInterval(()=>{
     time--;
     if(time <= 0){
+      clearInterval(interval);
       location.href = "expired.html";
+    } else {
+      updateTimer();
     }
-    document.getElementById("timer").innerText =
-      Math.floor(time/60) + ":" + String(time%60).padStart(2,"0");
   },1000);
+
 })();
