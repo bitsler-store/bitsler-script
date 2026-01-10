@@ -1,20 +1,40 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><title>Download</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Download File</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-</head><body>
-<div class="container center">
-<h1>Download</h1>
-<p id="m">Checking link…</p>
-<a id="f" class="btn" style="display:none" href="fichier.txt">Download</a>
+</head>
+<body>
+<div class="container" style="text-align:center;padding:20px;">
+  <h1>Download your file</h1>
+  <p id="msg"></p>
+  <a id="dl" class="btn" href="#">Download</a>
 </div>
 <script>
-const t=new URLSearchParams(location.search).get("t");
-const k="dl_"+t;
-let d=JSON.parse(localStorage.getItem(k)||"null");
-if(!d){m.textContent="Invalid link";throw""}
-if(d.used||Date.now()>d.exp){m.textContent="Link expired";throw""}
-if(d.fp!==navigator.userAgent){m.textContent="Device mismatch";throw""}
-d.used=true; localStorage.setItem(k,JSON.stringify(d));
-m.textContent="Your file is ready"; f.style.display="block";
+const params = new URLSearchParams(window.location.search);
+const oid = params.get("oid");
+const order = JSON.parse(localStorage.getItem("order_"+oid)||"null");
+const msg = document.getElementById("msg");
+const dl = document.getElementById("dl");
+
+if(!order){ 
+  msg.textContent="Link expired or invalid."; 
+  dl.style.display="none"; 
+} else {
+  if(order.status === "used"){ 
+    msg.textContent="This link has already been used."; 
+    dl.style.display="none"; 
+  } else {
+    msg.textContent = "Click below to download your file.";
+    dl.href = "fichier.txt";
+    dl.addEventListener("click", ()=>{
+      order.status="used";
+      localStorage.setItem("order_"+oid, JSON.stringify(order));
+    });
+  }
+}
 </script>
-</body></html>
+</body>
+</html>
