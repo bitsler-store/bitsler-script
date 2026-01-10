@@ -1,32 +1,93 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><title>Buy Digital Product</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Buy Digital Product</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-</head><body>
-<div class="container center">
-<h1>Digital Product</h1>
-<p>Exclusive TXT file. Instant download after payment.</p>
-<div class="price">$10 USD</div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
 
-<label>Email (required)</label>
-<input id="email" type="email" placeholder="you@email.com" required>
+<body>
+<div class="container">
 
-<button class="btn crypto" onclick="go('BTC')"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023">Bitcoin</button>
-<button class="btn crypto" onclick="go('ETH')"><img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023">Ethereum</button>
-<button class="btn crypto" onclick="go('LTC')"><img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023">Litecoin</button>
-<button class="btn crypto" onclick="go('DOGE')"><img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023">Dogecoin</button>
-<button class="btn crypto" onclick="go('USDT_TRON')"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023">USDT TRC20</button>
-<button class="btn crypto" onclick="go('USDT_BEP20')"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023">USDT BEP20</button>
+  <h1>Premium Digital File</h1>
 
-<p class="small">Secure crypto payments · Direct to wallet</p>
+  <p>
+    Get instant access to a high-value digital TXT file.
+    Secure crypto payment, immediate delivery.
+  </p>
+
+  <div class="price">$10 USD</div>
+
+  <ul style="text-align:left;color:#475569;font-size:14px;">
+    <li>✔ Instant delivery after payment</li>
+    <li>✔ Secure crypto payment</li>
+    <li>✔ Unique download link</li>
+    <li>✔ Compatible mobile & desktop</li>
+  </ul>
+
+  <label for="email"><strong>Email address (required)</strong></label>
+  <input
+    type="email"
+    id="email"
+    placeholder="your@email.com"
+    required
+  >
+
+  <p class="small">
+    Choose your preferred cryptocurrency:
+  </p>
+
+  <button class="btn crypto" onclick="startPayment('BTC')">
+    Bitcoin (BTC)
+  </button>
+
+  <button class="btn crypto" onclick="startPayment('ETH')">
+    Ethereum (ETH)
+  </button>
+
+  <button class="btn crypto" onclick="startPayment('LTC')">
+    Litecoin (LTC)
+  </button>
+
+  <button class="btn crypto" onclick="startPayment('DOGE')">
+    Dogecoin (DOGE)
+  </button>
+
+  <button class="btn crypto" onclick="startPayment('USDT_TRON')">
+    USDT (TRC20)
+  </button>
+
+  <button class="btn crypto" onclick="startPayment('USDT_BEP20')">
+    USDT (BEP20)
+  </button>
+
+  <p class="small center">
+    Payments are sent directly to your wallet.
+  </p>
+
 </div>
 
-<script src="script.js"></script>
 <script>
-function go(c){
-  const e=email.value.trim();
-  if(!e) return alert("Email required");
-  location.href=`pay.html?c=${c}&e=${encodeURIComponent(e)}`;
+function startPayment(crypto) {
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    alert("Email is required");
+    return;
+  }
+
+  if (!email.includes("@")) {
+    alert("Please enter a valid email address");
+    return;
+  }
+
+  window.location.href =
+    `pay.html?c=${encodeURIComponent(crypto)}&e=${encodeURIComponent(email)}`;
 }
 </script>
-</body></html>
+
+</body>
+</html>
