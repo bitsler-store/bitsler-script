@@ -74,16 +74,33 @@ function copyAddress(){
     if(seconds<0){ clearInterval(interval); window.location.href="expired.html"; }
   },1000);
 
-  // Vérification TXID via Cloudflare Worker toutes les 20s
-  setInterval(async ()=>{
-    try{
-      const res = await fetch(`https://crypto-pay-worker.bijamalala.workers.dev?crypto=${crypto}&address=${wallets[crypto].address}&amount=${PRICE_USD}`);
-      const data = await res.json();
-      if(data.paid){
-        localStorage.setItem("txid_"+orderId, data.txid);
-        window.location.href = `success.html?oid=${orderId}&e=${email}`;
-      }
-    }catch(e){}
-  },20000);
+  // Vérification TXID via Cloudflare Worker
+setInterval(async ()=>{
+  try{
+    const res = await fetch(`https://YOUR-WORKER.workers.dev?crypto=${crypto}&address=${wallets[crypto].address}&amount=${PRICE_USD}`);
+    const data = await res.json();
+    if(data.paid){
+      const orderData = JSON.parse(localStorage.getItem("order_"+orderId)) || {};
+      orderData.txid = data.txid;
+
+      // Récupérer IP + pays via ipapi.co
+      fetch('https://ipapi.co/json/')
+        .then(res=>res.json())
+        .then(ipData=>{
+          orderData.ip = ipData.ip || "N/A";
+          orderData.country = ipData.country_name || "N/A";
+          orderData.status = "paid";
+          localStorage.setItem("order_"+orderId, JSON.stringify(orderData));
+          window.location.href = `success.html?oid=${orderId}&e=${email}`;
+        }).catch(e=>{
+          orderData.ip = "N/A";
+          orderData.country = "N/A";
+          orderData.status = "paid";
+          localStorage.setItem("order_"+orderId, JSON.stringify(orderData));
+          window.location.href = `success.html?oid=${orderId}&e=${email}`;
+        });
+    }
+  }catch(e){}
+},20000);
 
 })();
