@@ -4,34 +4,145 @@
 <meta charset="UTF-8">
 <title>Admin Dashboard</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+body {
+  background: linear-gradient(135deg, #0e0e12, #141420);
+  font-family: Arial, sans-serif;
+  color: #fff;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.card {
+  background: #16161d;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+thead {
+  background: #0e0e12;
+}
+
+th, td {
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+th {
+  color: #00ffae;
+  font-weight: 600;
+}
+
+tbody tr {
+  background: #1a1a28;
+  transition: background 0.2s;
+}
+
+tbody tr:nth-child(even) {
+  background: #202030;
+}
+
+tbody tr:hover {
+  background: #2a2a40;
+}
+
+.status-paid {
+  color: #00ffae;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.status-expired {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+/* LOGIN */
+#loginBox {
+  max-width: 400px;
+  margin: 120px auto;
+  background: #16161d;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+#loginBox input {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 8px;
+  border: none;
+}
+
+#loginBox button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #00ffae;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<div class="box" id="loginBox">
+<!-- LOGIN -->
+<div id="loginBox">
   <h2>Accès administrateur</h2>
   <input type="password" id="pin" placeholder="Code PIN admin">
   <button onclick="login()">Déverrouiller</button>
 </div>
 
-<div class="box" id="adminBox" style="display:none;">
-  <h2>Commandes</h2>
-  <table id="ordersTable">
-    <thead>
-      <tr>
-        <th>Order ID</th>
-        <th>Email</th>
-        <th>Crypto</th>
-        <th>USD</th>
-        <th>Status</th>
-        <th>TXID</th>
-        <th>IP</th>
-        <th>Pays</th>
-        <th>Créé</th>
-        <th>Payé</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<!-- DASHBOARD -->
+<div class="dashboard-container" id="adminBox" style="display:none;">
+  <div class="card">
+    <h2>📊 Tableau des commandes</h2>
+
+    <table id="ordersTable">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Email</th>
+          <th>Crypto</th>
+          <th>USD</th>
+          <th>Status</th>
+          <th>TXID</th>
+          <th>IP</th>
+          <th>Pays</th>
+          <th>Créé le</th>
+          <th>Payé le</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+  </div>
 </div>
 
 <script src="admin.js"></script>
