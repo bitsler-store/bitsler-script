@@ -2,39 +2,62 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Download File</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Download Your File</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container" style="text-align:center;padding:20px;">
-  <h1>Download your file</h1>
-  <p id="msg"></p>
-  <a id="dl" class="btn" href="#">Download</a>
+<div class="box">
+  <h2>Download</h2>
+  <p id="msg">Verifying your order...</p>
+  <a id="fileLink" href="#" style="display:none;" download>Download File</a>
 </div>
-<script>
-const params = new URLSearchParams(window.location.search);
-const oid = params.get("oid");
-const order = JSON.parse(localStorage.getItem("order_"+oid)||"null");
-const msg = document.getElementById("msg");
-const dl = document.getElementById("dl");
 
-if(!order){ 
-  msg.textContent="Link expired or invalid."; 
-  dl.style.display="none"; 
-} else {
-  if(order.status === "used"){ 
-    msg.textContent="This link has already been used."; 
-    dl.style.display="none"; 
-  } else {
-    msg.textContent = "Click below to download your file.";
-    dl.href = "fichier.txt";
-    dl.addEventListener("click", ()=>{
-      order.status="used";
-      localStorage.setItem("order_"+oid, JSON.stringify(order));
+<script>
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // ton Worker
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get("orderId");
+
+async function verifyOrder(){
+  try{
+    const resp = await fetch(`${WORKER_URL}/admin/orders`);
+    const orders = await resp.json();
+    const order = orders.find(o => o.orderId === orderId);
+
+    if(!order){
+      document.getElementById("msg").innerText = "Order not found or expired.";
+      return;
+    }
+
+    if(order.status !== "paid"){
+      document.getElementById("msg").innerText = "Payment not confirmed yet.";
+      return;
+    }
+
+    // Anti-double
+    if(order.downloaded){
+      document.getElementById("msg").innerText = "File already downloaded on another device.";
+      return;
+    }
+
+    // Génère lien unique
+    const link = "fichier.txt"; // fichier réel
+    document.getElementById("fileLink").href = link;
+    document.getElementById("fileLink").style.display = "inline-block";
+    document.getElementById("msg").innerText = "Click the button to download your file.";
+
+    // Marque comme téléchargé
+    await fetch(`${WORKER_URL}/update-order`, {
+      method:"POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ orderId, downloaded:true })
     });
+
+  }catch(e){
+    document.getElementById("msg").innerText = "Error verifying order.";
   }
 }
+
+verifyOrder();
 </script>
 </body>
 </html>
