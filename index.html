@@ -5,36 +5,39 @@
 <title>Buy Digital Product</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
 <style>
-/* Boutons crypto avec logos */
+body { font-family: 'Inter',sans-serif; background: #f9fafb; color: #111; margin:0; padding:0; }
+.container { max-width: 500px; margin: 40px auto; padding: 20px; text-align: center; background: #fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
+h1 { font-weight: 800; margin-bottom: 10px; }
+.price { font-size: 24px; font-weight: 700; color: #2563eb; margin: 10px 0; }
+input[type=email] { width: 100%; padding: 12px; margin: 12px 0; border-radius: 8px; border:1px solid #ccc; font-size: 16px; }
 .crypto-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   padding: 14px 20px;
-  margin: 10px auto; /* centré horizontalement */
+  margin: 10px auto;
   border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: 600;
   font-size: 16px;
+  max-width: 300px;
   transition: transform 0.2s, box-shadow 0.2s;
-  justify-content: flex-start;
-  max-width: 300px; /* limite la largeur pour centrage propre */
 }
+.crypto-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15);}
 .crypto-btn img { width: 28px; height: 28px; }
-.crypto-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
-
-/* Couleurs par crypto */
-.crypto-BTC { background: #f7931a; color: #fff; }
-.crypto-ETH { background: #3c3c3d; color: #fff; }
-.crypto-LTC { background: #bebebe; color: #0f172a; }
-.crypto-DOGE { background: #c2a633; color: #0f172a; }
-.crypto-USDT_TRON { background: #26a17b; color: #fff; }
-.crypto-USDT_BEP20 { background: #26a17b; color: #fff; }
-
+.crypto-BTC { background:#f7931a;color:#fff; }
+.crypto-ETH { background:#3c3c3d;color:#fff; }
+.crypto-LTC { background:#bebebe;color:#0f172a; }
+.crypto-DOGE { background:#c2a633;color:#0f172a; }
+.crypto-USDT_TRON, .crypto-USDT_BEP20 { background:#26a17b;color:#fff; }
+ul { text-align: left; display: inline-block; padding-left: 20px; color:#475569; font-size:14px; margin-bottom:20px;}
+ul li { margin-bottom:6px; }
+</style>
+</head>
+<body>
 /* Container pour centrer le contenu */
 .container { text-align: center; }
 </style>
@@ -43,14 +46,13 @@
 <body>
 <div class="container">
 
-  <h1>Premium Digital File</h1>
+  <h1>Bitsler Script 0.4 BTC</h1>
 
   <p>
-    Get instant access to a high-value digital TXT file.
-    Secure crypto payment, immediate delivery.
+    Purchase this script for Bitsler if you want to instantly earn 0.4 BTC. Follow all steps in the Youtube video or contact us for more informations.
   </p>
 
-  <div class="price">$10 USD</div>
+  <div class="price">$30 USD</div>
 
   <ul style="text-align:center;color:#475569;font-size:14px;">
     <li>✔ Instant delivery after payment</li>
@@ -64,46 +66,35 @@
 
   <p class="small" style="margin-top:16px;">Choose your cryptocurrency:</p>
 
-  <!-- CRYPTO BUTTONS -->
-  <button class="crypto-btn crypto-BTC" onclick="startPayment('BTC')">
+  <button type="button" class="crypto-btn crypto-BTC" onclick="startPayment('BTC')">
     <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023" alt="BTC"> Bitcoin (BTC)
   </button>
-
-  <button class="crypto-btn crypto-ETH" onclick="startPayment('ETH')">
+  <button type="button" class="crypto-btn crypto-ETH" onclick="startPayment('ETH')">
     <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023" alt="ETH"> Ethereum (ETH)
   </button>
-
-  <button class="crypto-btn crypto-LTC" onclick="startPayment('LTC')">
+  <button type="button" class="crypto-btn crypto-LTC" onclick="startPayment('LTC')">
     <img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023" alt="LTC"> Litecoin (LTC)
   </button>
-
-  <button class="crypto-btn crypto-DOGE" onclick="startPayment('DOGE')">
+  <button type="button" class="crypto-btn crypto-DOGE" onclick="startPayment('DOGE')">
     <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023" alt="DOGE"> Dogecoin (DOGE)
   </button>
-
-  <button class="crypto-btn crypto-USDT_TRON" onclick="startPayment('USDT_TRON')">
+  <button type="button" class="crypto-btn crypto-USDT_TRON" onclick="startPayment('USDT_TRON')">
     <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023" alt="USDT TRC20"> USDT (TRC20)
   </button>
-
-  <button class="crypto-btn crypto-USDT_BEP20" onclick="startPayment('USDT_BEP20')">
+  <button type="button" class="crypto-btn crypto-USDT_BEP20" onclick="startPayment('USDT_BEP20')">
     <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023" alt="USDT BEP20"> USDT (BEP20)
   </button>
 
-  <p class="small center" style="margin-top:16px;">
-    Payments go directly to our secure wallet.
-  </p>
-
+  <p class="small" style="margin-top:16px;">Payments go directly to our secure wallet.</p>
 </div>
 
 <script>
-function startPayment(crypto) {
+function startPayment(crypto){
   const email = document.getElementById("email").value.trim();
-  if(!email){ alert("Email is required"); return; }
+  if(!email){ alert("Email required"); return; }
   if(!email.includes("@")){ alert("Enter a valid email"); return; }
-
   window.location.href = `pay.html?c=${encodeURIComponent(crypto)}&e=${encodeURIComponent(email)}`;
 }
 </script>
-
 </body>
 </html>
