@@ -5,3 +5,10 @@ h1{font-weight:800;}
 input[type=email]{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;}
 .btn{display:inline-block;padding:10px 20px;background:#2563eb;color:#fff;border:none;border-radius:8px;text-decoration:none;cursor:pointer;}
 .btn:hover{background:#1d4ed8;}
+label[for="email"] {
+  display: block;       /* Le label devient un bloc */
+  text-align: center;   /* Centré horizontalement */
+  font-weight: 600;     /* Optionnel : plus visible */
+  margin-bottom: 8px;   /* Espace avec l'input */
+  font-size: 16px;      /* Ajustable */
+}
