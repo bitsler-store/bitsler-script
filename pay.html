@@ -43,7 +43,8 @@ const qr = document.getElementById("qr");
 
   const a=await getAmount(c);
   amt.textContent=`Send ${a} ${c}`;
-  qr.src=`https://api.qrserver.com/v1/create-qr-code/?data=${wallets[c].addr}`;
+  qr.src = "https://api.qr-code-generator.com/v1/create?size=180x180&data=" 
+         + encodeURIComponent(wallets[c].addr);
 
   let s=EXPIRATION_MIN*60;
   setInterval(()=>{
