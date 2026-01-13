@@ -92,45 +92,12 @@
 </div>
 
 <script>
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
-let orderInProgress = false;
-
 function startPayment(crypto){
-  if(orderInProgress) return;
-  orderInProgress = true;
-
-  const email = document.getElementById("email").value.trim();
-  if(!email || !email.includes("@")){
-    alert("Please enter a valid email address");
-    orderInProgress = false;
-    return;
-  }
-
-  document.querySelectorAll(".crypto-btn").forEach(b => b.disabled = true);
-
-  const orderId = crypto.randomUUID();
-
-  // 🔹 Redirection immédiate (UX fluide)
-  window.location.href =
-    `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
-
-  // 🔹 Appel backend en arrière-plan
-  fetch(WORKER_URL + "/create-order", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      orderId,
-      email,
-      crypto,
-      network: crypto,
-      amountUSD: 30
-    })
-  })
-  .then(r => r.json())
-  .then(d => console.log("Order created:", d))
-  .catch(err => console.warn("Backend issue (non bloquant):", err));
+  alert("CLICK OK → " + crypto);
+  window.location.href = "pay.html";
 }
 </script>
+
 
 
 </body>
