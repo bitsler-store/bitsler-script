@@ -92,53 +92,46 @@
 </div>
 
 <script>
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // Remplace par ton Worker
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
 let orderInProgress = false;
 
-async function startPayment(crypto){
-  if (orderInProgress) return;
+function startPayment(crypto){
+  if(orderInProgress) return;
   orderInProgress = true;
 
   const email = document.getElementById("email").value.trim();
   if(!email || !email.includes("@")){
-    alert("Valid email required");
+    alert("Please enter a valid email address");
     orderInProgress = false;
     return;
   }
 
-  // Désactiver tous les boutons crypto
-  document.querySelectorAll(".crypto-btn").forEach(btn => btn.disabled = true);
+  document.querySelectorAll(".crypto-btn").forEach(b => b.disabled = true);
 
-  // Order ID robuste (UUID)
   const orderId = crypto.randomUUID();
 
-  try {
-    const res = await fetch(WORKER_URL + "/create-order", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        orderId,
-        email,
-        crypto,
-        network: crypto,
-        amountUSD: 30
-      })
-    });
+  // 🔹 Redirection immédiate (UX fluide)
+  window.location.href =
+    `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
 
-    const data = await res.json();
-    if(!data.ok) throw "Backend error";
-
-    window.location.href =
-      `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
-
-  } catch(e){
-    alert("Failed to create order");
-    orderInProgress = false;
-    document.querySelectorAll(".crypto-btn").forEach(btn => btn.disabled = false);
-  }
+  // 🔹 Appel backend en arrière-plan
+  fetch(WORKER_URL + "/create-order", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      orderId,
+      email,
+      crypto,
+      network: crypto,
+      amountUSD: 30
+    })
+  })
+  .then(r => r.json())
+  .then(d => console.log("Order created:", d))
+  .catch(err => console.warn("Backend issue (non bloquant):", err));
 }
-
 </script>
+
 
 </body>
 </html>
