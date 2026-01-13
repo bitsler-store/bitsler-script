@@ -94,9 +94,22 @@
 <script>
 function startPayment(crypto){
   alert("CLICK OK → " + crypto);
-  window.location.href = "pay.html";
+
+  const email = document.getElementById("email").value.trim();
+  if(!email || !email.includes("@")){
+    alert("Please enter a valid email");
+    return;
+  }
+
+  const orderId = Date.now() + "-" + Math.random().toString(36).slice(2);
+
+  window.location.href =
+    "./pay.html?crypto=" + encodeURIComponent(crypto) +
+    "&email=" + encodeURIComponent(email) +
+    "&orderId=" + orderId;
 }
 </script>
+
 
 
 
