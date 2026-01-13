@@ -73,8 +73,8 @@ async function getCryptoAmount(crypto) {
 
   document.getElementById("copyBtn").onclick = () =>
     navigator.clipboard.writeText(wallets[crypto])
-.then(() => alert("Address copied!"))
-      .catch(() => alert("Copy failed"));
+.then(() => alert("Address copied!")) ;
+     
   /* ============================= */
   /* TIMER SYNC BACKEND */
   /* ============================= */
