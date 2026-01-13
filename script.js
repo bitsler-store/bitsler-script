@@ -90,6 +90,11 @@ async function getCryptoAmount(crypto) {
 
   document.getElementById("orderId").innerText = orderId;
   document.getElementById("title").innerText = `Pay with ${crypto}`;
+  if (cryptoMeta[crypto]) {
+    document.getElementById("cryptoLogo").src = cryptoMeta[crypto].logo;
+    document.getElementById("cryptoName").innerText = cryptoMeta[crypto].name;
+  }
+  
   document.getElementById("address").innerText = wallets[crypto];
 
   document.getElementById("qr").src =
