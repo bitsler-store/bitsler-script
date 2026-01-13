@@ -92,7 +92,7 @@
 </div>
 
 <script>
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // ton Worker
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
 let orderInProgress = false;
 
 function startPayment(crypto){
@@ -106,36 +106,37 @@ function startPayment(crypto){
     return;
   }
 
-  // Désactiver les boutons
   document.querySelectorAll(".crypto-btn").forEach(b => b.disabled = true);
 
-  // Order ID robuste
   const orderId = crypto.randomUUID();
 
-  // ✅ 1) Redirection immédiate (UX fluide)
-  window.location.href =
-    "./pay.html?crypto=" + encodeURIComponent(crypto) +
+  // 🔴 REDIRECTION ABSOLUE (clé du problème)
+  const basePath = window.location.href.replace(/\/index\.html.*$/, "/");
+  const target =
+    basePath +
+    "pay.html?crypto=" + encodeURIComponent(crypto) +
     "&email=" + encodeURIComponent(email) +
     "&orderId=" + orderId;
 
-  // ✅ 2) Envoi des données au Worker (non bloquant)
+  // Redirection forcée
+  window.location.assign(target);
+
+  // Envoi backend (non bloquant)
   fetch(WORKER_URL + "/create-order", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify({
-      orderId: orderId,
-      email: email,
-      crypto: crypto,
+      orderId,
+      email,
+      crypto,
       network: crypto,
       amountUSD: 30,
       createdAt: Date.now()
     })
-  })
-  .then(r => r.json())
-  .then(d => console.log("Order saved:", d))
-  .catch(err => console.warn("Worker unreachable (non-blocking):", err));
+  }).catch(()=>{});
 }
 </script>
+
 
 </body>
 </html>
