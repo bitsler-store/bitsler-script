@@ -93,45 +93,51 @@
 
 <script>
 const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // Remplace par ton Worker
+let orderInProgress = false;
 
-function startPayment(crypto){
+async function startPayment(crypto){
+  if (orderInProgress) return;
+  orderInProgress = true;
+
   const email = document.getElementById("email").value.trim();
-  if(!email){
-    alert("Email required");
-    return;
-  }
-  if(!email.includes("@")){
-    alert("Enter a valid email");
+  if(!email || !email.includes("@")){
+    alert("Valid email required");
+    orderInProgress = false;
     return;
   }
 
-  // Génération orderId simple
-const orderId = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
+  // Désactiver tous les boutons crypto
+  document.querySelectorAll(".crypto-btn").forEach(btn => btn.disabled = true);
 
-  // Création order backend
-  fetch(WORKER_URL + "/create-order", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      orderId,
-      email,
-      crypto,
-      network: crypto,
-      amountUSD: 30
-    })
-  })
-  .then(r=>r.json())
-  .then(resp=>{
-    if(resp.ok){
-      window.location.href = `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
-    } else {
-      alert("Backend error: " + (resp.error || "Unknown"));
-    }
-  })
-  .catch(e=>{
-    alert("Failed to create order: " + e);
-  });
+  // Order ID robuste (UUID)
+  const orderId = crypto.randomUUID();
+
+  try {
+    const res = await fetch(WORKER_URL + "/create-order", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        orderId,
+        email,
+        crypto,
+        network: crypto,
+        amountUSD: 30
+      })
+    });
+
+    const data = await res.json();
+    if(!data.ok) throw "Backend error";
+
+    window.location.href =
+      `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
+
+  } catch(e){
+    alert("Failed to create order");
+    orderInProgress = false;
+    document.querySelectorAll(".crypto-btn").forEach(btn => btn.disabled = false);
+  }
 }
+
 </script>
 
 </body>
