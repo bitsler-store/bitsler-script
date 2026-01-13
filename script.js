@@ -98,7 +98,7 @@ async function getCryptoAmount(crypto) {
   });
 
   // Timer
-  let time = 900;
+  let time = 1200;
   const timerEl = document.getElementById("timer");
 
   function updateTimer() {
