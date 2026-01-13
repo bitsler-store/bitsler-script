@@ -3,67 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Buy Bitsler Script</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="stylesheet" href="style.css">
-
 <style>
-body {
-  background: #0e0e12;
-  font-family: Arial, sans-serif;
-  color: #fff;
-}
-
-.box {
-  max-width: 420px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #151521;
-  border-radius: 14px;
-  box-shadow: 0 0 25px rgba(0,255,174,0.15);
-  text-align: center;
-}
-
-h1 {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.desc {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 15px;
-}
-
-.price {
-  font-size: 28px;
-  font-weight: bold;
-  margin: 15px 0;
-  color: #00ffae;
-}
-
-label {
-  display: block;
-  margin-top: 15px;
-  margin-bottom: 6px;
-  font-size: 14px;
-  text-align: center;
-}
-
-input[type="email"] {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  font-size: 15px;
-}
-
-.choose {
-  margin: 18px 0 10px;
-  font-weight: bold;
-}
-
+/* Spécifique index.html */
 .crypto-btn {
   display: flex;
   align-items: center;
@@ -77,7 +19,7 @@ input[type="email"] {
   font-size: 16px;
   background: #1a1a28;
   color: #fff;
-  transition: 0.25s;
+  transition: 0.3s;
 }
 
 .crypto-btn:hover {
@@ -85,37 +27,31 @@ input[type="email"] {
   color: #0e0e12;
 }
 
-.crypto-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .crypto-btn img {
   width: 24px;
   height: 24px;
 }
 
-.socials {
-  margin-top: 18px;
-}
-
 .socials a {
-  margin: 0 10px;
+  margin: 0 12px;
   text-decoration: none;
   color: #00c3ff;
   font-weight: bold;
 }
+
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #00ffae;
+}
 </style>
 </head>
-
 <body>
 
 <div class="box">
-  <h1>Bitsler Script</h1>
-  <p class="desc">
-    Buy the script and learn how to generate up to <b>0.4 BTC</b> on Bitsler.com.
-    Instant access after payment.
-  </p>
+  <h1>Bitsler Script 0.4 BTC</h1>
+  <p class="desc">Purchase the script if you want to instantly earn 0.4 BTC on Bitsler.com. Follow the instructions in the YouTube video. Contact me if you require assistance.</p>
 
   <div class="price">$30 USD</div>
 
@@ -124,28 +60,29 @@ input[type="email"] {
 
   <p class="choose">Choose your cryptocurrency</p>
 
+  <!-- BTC -->
   <button class="crypto-btn" onclick="startPayment('BTC')">
-    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025"> Bitcoin (BTC)
+    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="BTC"> Bitcoin (BTC)
   </button>
-
+  <!-- ETH -->
   <button class="crypto-btn" onclick="startPayment('ETH')">
-    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025"> Ethereum (ETH)
+    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025" alt="ETH"> Ethereum (ETH)
   </button>
-
+  <!-- LTC -->
   <button class="crypto-btn" onclick="startPayment('LTC')">
-    <img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=025"> Litecoin (LTC)
+    <img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=025" alt="LTC"> Litecoin (LTC)
   </button>
-
+  <!-- DOGE -->
   <button class="crypto-btn" onclick="startPayment('DOGE')">
-    <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025"> Dogecoin (DOGE)
+    <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025" alt="DOGE"> Dogecoin (DOGE)
   </button>
-
+  <!-- USDT TRC20 -->
   <button class="crypto-btn" onclick="startPayment('USDT_TRC20')">
-    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=025"> USDT (TRC20)
+    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=025" alt="USDT"> USDT (TRC20)
   </button>
-
+  <!-- USDT BEP20 -->
   <button class="crypto-btn" onclick="startPayment('USDT_BEP20')">
-    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=025"> USDT (BEP20)
+    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=025" alt="USDT"> USDT (BEP20)
   </button>
 
   <div class="socials">
@@ -155,48 +92,45 @@ input[type="email"] {
 </div>
 
 <script>
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // 🔴 remplace si besoin
-let orderInProgress = false;
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // Remplace par ton Worker
 
-async function startPayment(crypto){
-  if(orderInProgress) return;
-  orderInProgress = true;
-
+function startPayment(crypto){
   const email = document.getElementById("email").value.trim();
-  if(!email || !email.includes("@")){
-    alert("Please enter a valid email address");
-    orderInProgress = false;
+  if(!email){
+    alert("Email required");
+    return;
+  }
+  if(!email.includes("@")){
+    alert("Enter a valid email");
     return;
   }
 
-  document.querySelectorAll(".crypto-btn").forEach(b => b.disabled = true);
+  // Génération orderId simple
+const orderId = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
 
-  const orderId = crypto.randomUUID();
-
-  try {
-    const res = await fetch(WORKER_URL + "/create-order", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        orderId,
-        email,
-        crypto,
-        network: crypto,
-        amountUSD: 30
-      })
-    });
-
-    const data = await res.json();
-    if(!data.ok) throw "Backend error";
-
-    window.location.href =
-      `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
-
-  } catch(e){
-    alert("Failed to create order. Please try again.");
-    orderInProgress = false;
-    document.querySelectorAll(".crypto-btn").forEach(b => b.disabled = false);
-  }
+  // Création order backend
+  fetch(WORKER_URL + "/create-order", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      orderId,
+      email,
+      crypto,
+      network: crypto,
+      amountUSD: 30
+    })
+  })
+  .then(r=>r.json())
+  .then(resp=>{
+    if(resp.ok){
+      window.location.href = `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
+    } else {
+      alert("Backend error: " + (resp.error || "Unknown"));
+    }
+  })
+  .catch(e=>{
+    alert("Failed to create order: " + e);
+  });
 }
 </script>
 
