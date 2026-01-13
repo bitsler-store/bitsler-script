@@ -1,6 +1,9 @@
 const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
 const PRICE_USD = 30;
 
+/* ============================= */
+/* WALLETS */
+/* ============================= */
 const wallets = {
   BTC: "1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4",
   ETH: "0xb0896309e10d52c6925179a7426f3d642db096db",
@@ -9,6 +12,7 @@ const wallets = {
   USDT_TRC20: "TJbd8B6dGaYYuhwRXAMppxDnYKanXHWirQ",
   USDT_BEP20: "0xb0896309e10d52c6925179a7426f3d642db096db"
 };
+
 /* ============================= */
 /* CRYPTO LOGOS */
 /* ============================= */
@@ -38,6 +42,10 @@ const cryptoMeta = {
     logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025"
   }
 };
+
+/* ============================= */
+/* COINBASE PAIRS */
+/* ============================= */
 const coinbasePairs = {
   BTC: "BTC-USD",
   ETH: "ETH-USD",
@@ -50,7 +58,7 @@ function getParam(name) {
 }
 
 /* ============================= */
-/* GET ORDER FROM BACKEND */
+/* GET ORDER */
 /* ============================= */
 async function fetchOrder(orderId) {
   const r = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
@@ -59,7 +67,7 @@ async function fetchOrder(orderId) {
 }
 
 /* ============================= */
-/* CRYPTO AMOUNT */
+/* AMOUNT CALC */
 /* ============================= */
 async function getCryptoAmount(crypto) {
   if (crypto.startsWith("USDT")) return PRICE_USD.toFixed(2);
@@ -86,36 +94,39 @@ async function getCryptoAmount(crypto) {
     return;
   }
 
-  const { crypto, email, createdAt } = order;
+  const { crypto, createdAt } = order;
 
+  /* ==== HEADER ==== */
   document.getElementById("orderId").innerText = orderId;
   document.getElementById("title").innerText = `Pay with ${crypto}`;
+
   if (cryptoMeta[crypto]) {
     document.getElementById("cryptoLogo").src = cryptoMeta[crypto].logo;
     document.getElementById("cryptoName").innerText = cryptoMeta[crypto].name;
   }
-  
-  document.getElementById("address").innerText = wallets[crypto];
 
+  /* ==== ADDRESS + QR ==== */
+  document.getElementById("address").innerText = wallets[crypto];
   document.getElementById("qr").src =
     `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallets[crypto]}`;
 
+  /* ==== AMOUNT ==== */
   const amount = await getCryptoAmount(crypto);
   document.getElementById("amount").innerText =
     `Send exactly ${amount} ${crypto} (≈ $${PRICE_USD})`;
 
-document.getElementById("copyBtn").onclick = async () => {
-  try {
-    await navigator.clipboard.writeText(wallets[crypto]);
-    alert("Address copied!");
-  } catch (e) {
-    alert("Copy failed. Please copy manually.");
-  }
-};
+  /* ==== COPY BUTTON ==== */
+  document.getElementById("copyBtn").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(wallets[crypto]);
+      alert("Address copied!");
+    } catch (e) {
+      alert("Copy failed. Please copy manually.");
+    }
+  };
 
-     
   /* ============================= */
-  /* TIMER SYNC BACKEND */
+  /* TIMER (BACKEND SYNC) */
   /* ============================= */
   const EXPIRE_SECONDS = 1200;
   const expiresAt = createdAt + EXPIRE_SECONDS * 1000;
