@@ -9,7 +9,35 @@ const wallets = {
   USDT_TRC20: "TJbd8B6dGaYYuhwRXAMppxDnYKanXHWirQ",
   USDT_BEP20: "0xb0896309e10d52c6925179a7426f3d642db096db"
 };
-
+/* ============================= */
+/* CRYPTO LOGOS */
+/* ============================= */
+const cryptoMeta = {
+  BTC: {
+    name: "Bitcoin (BTC)",
+    logo: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025"
+  },
+  ETH: {
+    name: "Ethereum (ETH)",
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025"
+  },
+  LTC: {
+    name: "Litecoin (LTC)",
+    logo: "https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=025"
+  },
+  DOGE: {
+    name: "Dogecoin (DOGE)",
+    logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025"
+  },
+  USDT_TRC20: {
+    name: "USDT (TRC20)",
+    logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025"
+  },
+  USDT_BEP20: {
+    name: "USDT (BEP20)",
+    logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025"
+  }
+};
 const coinbasePairs = {
   BTC: "BTC-USD",
   ETH: "ETH-USD",
