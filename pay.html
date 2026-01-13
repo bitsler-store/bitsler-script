@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <title>Crypto Payment</title>
 <link rel="stylesheet" href="style.css">
+
 <style>
 .crypto-header {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .crypto-header img {
@@ -43,14 +44,17 @@
 }
 </style>
 </head>
+
 <body>
 
 <div class="box">
+
   <!-- 🔥 CRYPTO HEADER (LOGO + NAME) -->
   <div class="crypto-header">
     <img id="cryptoLogo" src="" alt="Crypto logo">
     <span id="cryptoName"></span>
   </div>
+
   <h2 id="title">Payment</h2>
 
   <p>Order ID:<br><strong id="orderId"></strong></p>
@@ -59,19 +63,22 @@
 
   <p><strong>Send to address:</strong></p>
   <p id="address"></p>
+
   <button id="copyBtn">Copy Address</button>
 
-  <img id="qr" src="" width="200">
+  <img id="qr" src="" width="200" alt="QR Code">
 
   <p class="timer">
     Time left: <span id="timer">20:00</span>
   </p>
-<!-- ⚠️ WARNING -->
+
+  <!-- ⚠️ WARNING -->
   <div class="payment-warning">
     ⚠️ Please do not close this page.<br>
     Once payment has been made, wait for the script download link to appear.<br>
     <u>Make a note of your order number.</u>
   </div>
+
 </div>
 
 <script src="script.js"></script>
