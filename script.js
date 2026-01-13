@@ -71,9 +71,15 @@ async function getCryptoAmount(crypto) {
   document.getElementById("amount").innerText =
     `Send exactly ${amount} ${crypto} (≈ $${PRICE_USD})`;
 
-  document.getElementById("copyBtn").onclick = () =>
-    navigator.clipboard.writeText(wallets[crypto])
-.then(() => alert("Address copied!")) ;
+document.getElementById("copyBtn").onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(wallets[crypto]);
+    alert("Address copied!");
+  } catch (e) {
+    alert("Copy failed. Please copy manually.");
+  }
+};
+
      
   /* ============================= */
   /* TIMER SYNC BACKEND */
