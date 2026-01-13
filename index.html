@@ -92,26 +92,50 @@
 </div>
 
 <script>
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // ton Worker
+let orderInProgress = false;
+
 function startPayment(crypto){
-  alert("CLICK OK → " + crypto);
+  if(orderInProgress) return;
+  orderInProgress = true;
 
   const email = document.getElementById("email").value.trim();
   if(!email || !email.includes("@")){
-    alert("Please enter a valid email");
+    alert("Please enter a valid email address");
+    orderInProgress = false;
     return;
   }
 
-  const orderId = Date.now() + "-" + Math.random().toString(36).slice(2);
+  // Désactiver les boutons
+  document.querySelectorAll(".crypto-btn").forEach(b => b.disabled = true);
 
+  // Order ID robuste
+  const orderId = crypto.randomUUID();
+
+  // ✅ 1) Redirection immédiate (UX fluide)
   window.location.href =
     "./pay.html?crypto=" + encodeURIComponent(crypto) +
     "&email=" + encodeURIComponent(email) +
     "&orderId=" + orderId;
+
+  // ✅ 2) Envoi des données au Worker (non bloquant)
+  fetch(WORKER_URL + "/create-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      orderId: orderId,
+      email: email,
+      crypto: crypto,
+      network: crypto,
+      amountUSD: 30,
+      createdAt: Date.now()
+    })
+  })
+  .then(r => r.json())
+  .then(d => console.log("Order saved:", d))
+  .catch(err => console.warn("Worker unreachable (non-blocking):", err));
 }
 </script>
-
-
-
 
 </body>
 </html>
