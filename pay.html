@@ -4,27 +4,122 @@
 <meta charset="UTF-8">
 <title>Crypto Payment</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+.crypto-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.crypto-header img {
+  width: 42px;
+  height: 42px;
+}
+
+.crypto-header span {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.payment-warning {
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ff3b3b, #ff9900);
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(255, 59, 59, 0.5);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+</style>
 </head>
 <body>
 
 <div class="box">
-  <h2 id="title">Payment</h2>
 
-  <p>Order ID:<br><strong id="orderId"></strong></p>
+  <!-- 🔥 CRYPTO SELECTED HEADER -->
+  <div class="crypto-header">
+    <img id="cryptoLogo" src="" alt="Crypto logo">
+    <span id="cryptoName"></span>
+  </div>
+
+  <p>
+    Order ID:<br>
+    <strong id="orderId"></strong>
+  </p>
 
   <p id="amount"></p>
 
   <p><strong>Send to address:</strong></p>
   <p id="address"></p>
+
   <button id="copyBtn">Copy Address</button>
 
-  <img id="qr" src="" width="200">
+  <img id="qr" src="" width="200" alt="QR Code">
 
   <p class="timer">
     Time left: <span id="timer">15:00</span>
   </p>
+
+  <!-- ⚠️ WARNING -->
+  <div class="payment-warning">
+    ⚠️ Please do not close this page.<br>
+    Once payment has been made, wait for the script download link to appear.<br>
+    <u>Make a note of your order number.</u>
+  </div>
+
 </div>
 
 <script src="script.js"></script>
+
+<!-- 🔹 LOGO + NOM CRYPTO -->
+<script>
+const params = new URLSearchParams(window.location.search);
+const crypto = params.get("crypto");
+
+const logos = {
+  BTC: {
+    name: "Bitcoin (BTC)",
+    logo: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025"
+  },
+  ETH: {
+    name: "Ethereum (ETH)",
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025"
+  },
+  LTC: {
+    name: "Litecoin (LTC)",
+    logo: "https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=025"
+  },
+  DOGE: {
+    name: "Dogecoin (DOGE)",
+    logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025"
+  },
+  USDT_TRC20: {
+    name: "USDT (TRC20)",
+    logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025"
+  },
+  USDT_BEP20: {
+    name: "USDT (BEP20)",
+    logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025"
+  }
+};
+
+if (logos[crypto]) {
+  document.getElementById("cryptoLogo").src = logos[crypto].logo;
+  document.getElementById("cryptoName").textContent = logos[crypto].name;
+}
+</script>
+
 </body>
 </html>
