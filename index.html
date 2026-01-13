@@ -92,36 +92,23 @@
 </div>
 
 <script>
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
-let orderInProgress = false;
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // Remplace par ton Worker
 
 function startPayment(crypto){
-  if(orderInProgress) return;
-  orderInProgress = true;
-
   const email = document.getElementById("email").value.trim();
-  if(!email || !email.includes("@")){
-    alert("Please enter a valid email address");
-    orderInProgress = false;
+  if(!email){
+    alert("Email required");
+    return;
+  }
+  if(!email.includes("@")){
+    alert("Enter a valid email");
     return;
   }
 
-  document.querySelectorAll(".crypto-btn").forEach(b => b.disabled = true);
+  // Génération orderId simple
+const orderId = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
 
-  const orderId = crypto.randomUUID();
-
-  // 🔴 REDIRECTION ABSOLUE (clé du problème)
-  const basePath = window.location.href.replace(/\/index\.html.*$/, "/");
-  const target =
-    basePath +
-    "pay.html?crypto=" + encodeURIComponent(crypto) +
-    "&email=" + encodeURIComponent(email) +
-    "&orderId=" + orderId;
-
-  // Redirection forcée
-  window.location.assign(target);
-
-  // Envoi backend (non bloquant)
+  // Création order backend
   fetch(WORKER_URL + "/create-order", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
@@ -130,13 +117,22 @@ function startPayment(crypto){
       email,
       crypto,
       network: crypto,
-      amountUSD: 30,
-      createdAt: Date.now()
+      amountUSD: 30
     })
-  }).catch(()=>{});
+  })
+  .then(r=>r.json())
+  .then(resp=>{
+    if(resp.ok){
+      window.location.href = `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
+    } else {
+      alert("Backend error: " + (resp.error || "Unknown"));
+    }
+  })
+  .catch(e=>{
+    alert("Failed to create order: " + e);
+  });
 }
 </script>
-
 
 </body>
 </html>
