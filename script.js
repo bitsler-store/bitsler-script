@@ -67,15 +67,13 @@ async function getCryptoAmount(crypto) {
   document.getElementById("qr").src =
     `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallets[crypto]}`;
 
-  // Calcul montant exact
   const amount = await getCryptoAmount(crypto);
   document.getElementById("amount").innerText =
     `Send exactly ${amount} ${crypto} (≈ $${PRICE_USD})`;
 
-  // COPY ADDRESS
-  document.getElementById("copyBtn").onclick = () => {
+  document.getElementById("copyBtn").onclick = () =>
     navigator.clipboard.writeText(wallets[crypto]);
-      
+
   /* ============================= */
   /* TIMER SYNC BACKEND */
   /* ============================= */
