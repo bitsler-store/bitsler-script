@@ -1,5 +1,5 @@
 const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
-const PRICE_USD = 0.1;
+const PRICE_USD = 0.16;
 
 /* ============================= */
 /* WALLETS */
