@@ -42,7 +42,7 @@ async function verifyOrder(){
     document.getElementById("msg").innerText = "Click the button to download your file.";
 
     // Marquer comme téléchargé
-    await fetch(`${WORKER_URL}/update-order`, {
+    await fetch(`${WORKER_URL}/mark-downloaded`, {
       method:"POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ orderId })
