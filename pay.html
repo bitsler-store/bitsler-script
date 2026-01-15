@@ -6,41 +6,52 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-.crypto-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 15px;
+.crypto-header{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+.crypto-header img{width:42px;height:42px;}
+.crypto-header span{font-size:20px;font-weight:bold;}
+
+.timer{
+  margin-top:10px;
+  font-size:18px;
+  font-weight:bold;
+  color:#ffcc00;
 }
 
-.crypto-header img {
-  width: 42px;
-  height: 42px;
+.txid-box{
+  margin-top:20px;
+}
+.txid-box input{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  margin-bottom:10px;
+}
+.txid-box button{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  background:#00ffae;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.crypto-header span {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.payment-warning {
-  margin-top: 15px;
-  padding: 14px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #ff3b3b, #ff9900);
-  color: #fff;
-  font-weight: bold;
-  font-size: 14px;
-  text-align: center;
-  box-shadow: 0 0 15px rgba(255, 59, 59, 0.5);
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+.payment-warning{
+  margin-top:20px;
+  padding:14px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#ff3b3b,#ff9900);
+  color:#fff;
+  font-weight:bold;
+  font-size:14px;
+  text-align:center;
 }
 </style>
 </head>
@@ -49,34 +60,38 @@
 
 <div class="box">
 
-  <!-- 🔥 CRYPTO HEADER (LOGO + NAME) -->
+  <!-- CRYPTO HEADER -->
   <div class="crypto-header">
-    <img id="cryptoLogo" src="" alt="Crypto logo">
+    <img id="cryptoLogo" src="">
     <span id="cryptoName"></span>
   </div>
 
-  <h2 id="title">Payment</h2>
+  <h2 id="title">Crypto Payment</h2>
 
   <p>Order ID:<br><strong id="orderId"></strong></p>
 
   <p id="amount"></p>
 
-  <p><strong>Send to address:</strong></p>
+  <p><strong>Send exactly to this address:</strong></p>
   <p id="address"></p>
 
-  <button id="copyBtn">Copy Address</button>
+  <button id="copyBtn">Copy address</button>
 
-  <img id="qr" src="" width="200" alt="QR Code">
+  <img id="qr" width="200">
 
   <p class="timer">
-    Time left: <span id="timer">20:00</span>
+    Time left: <span id="timer">30:00</span>
   </p>
 
-  <!-- ⚠️ WARNING -->
+  <!-- TXID -->
+  <div class="txid-box">
+    <input id="txidInput" placeholder="Enter your transaction hash (TXID)">
+    <button onclick="submitTxid()">I have paid</button>
+  </div>
+
   <div class="payment-warning">
-    ⚠️ Please do not close this page.<br>
-    Once payment has been made, wait for the script download link to appear.<br>
-    <u>Make a note of your order number.</u>
+    ⚠️ Do not close this page until payment is confirmed.<br>
+    Make sure you send the <u>exact amount</u>.
   </div>
 
 </div>
