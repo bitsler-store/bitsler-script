@@ -28,7 +28,7 @@ const orderId = params.get("orderId");
 // Récupérer email depuis backend
 async function loadOrder() {
   try {
-    const res = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
+    const res = await fetch(`${WORKER_URL}/public/order?orderId=${orderId}`)
     if(!res.ok) throw "Order not found";
     const order = await res.json();
     document.getElementById("email").innerText = order.email;
