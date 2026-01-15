@@ -20,7 +20,7 @@ const orderId = params.get("orderId");
 async function verifyOrder(){
   try{
     // Récupérer l'ordre depuis worker
-    const resp = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
+    const resp = await fetch(`${WORKER_URL}/public/order?orderId=${orderId}`)
     if(!resp.ok) throw "Order not found or expired";
     const order = await resp.json();
 
