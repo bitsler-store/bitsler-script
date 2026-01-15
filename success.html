@@ -7,23 +7,44 @@
 </head>
 <body>
 <div class="box">
-  <h2>Payment Received!</h2>
+  <h2>🎉 Payment Received!</h2>
   <p>Thank you for your purchase.</p>
+
   <p><strong>Email:</strong> <span id="email"></span></p>
   <p><strong>Order ID:</strong> <span id="orderId"></span></p>
+
   <button id="downloadBtn">Download Your File</button>
+
+  <p class="payment-warning">
+    ⚠️ Make sure you only download on one device. Sharing links is disabled.
+  </p>
 </div>
 
 <script>
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
 const params = new URLSearchParams(window.location.search);
-const email = params.get("email");
 const orderId = params.get("orderId");
-document.getElementById("email").innerText = email;
-document.getElementById("orderId").innerText = orderId;
 
-document.getElementById("downloadBtn").onclick = () => {
+// Récupérer email depuis backend
+async function loadOrder() {
+  try {
+    const res = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
+    if(!res.ok) throw "Order not found";
+    const order = await res.json();
+    document.getElementById("email").innerText = order.email;
+    document.getElementById("orderId").innerText = order.orderId;
+  } catch(e) {
+    document.getElementById("email").innerText = "-";
+    document.getElementById("orderId").innerText = "-";
+  }
+}
+
+// Lien de téléchargement unique
+document.getElementById("downloadBtn").onclick = async () => {
   window.location.href = `download.html?orderId=${orderId}`;
 };
+
+loadOrder();
 </script>
 </body>
 </html>
