@@ -30,46 +30,49 @@ const cryptoMeta = {
 /* ============================= */
 const coinbasePairs = { BTC: "BTC-USD", ETH: "ETH-USD", LTC: "LTC-USD", DOGE: "DOGE-USD" };
 
-function getParam(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
+function getParam(name) { return new URLSearchParams(window.location.search).get(name); }
 
 /* ============================= */
 /* GET ORDER */
 /* ============================= */
 async function fetchOrder(orderId) {
-  const r = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
-  if (!r.ok) return null;
-  return await r.json();
+  try {
+    const r = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
+    if(!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
 }
 
 /* ============================= */
-/* CALCUL AMOUNT CRYPTO */
+/* GET CRYPTO AMOUNT */
 /* ============================= */
 async function getCryptoAmount(crypto) {
-  if (crypto.startsWith("USDT")) return PRICE_USD.toFixed(2);
+  if(crypto.startsWith("USDT")) return PRICE_USD.toFixed(2);
   const pair = coinbasePairs[crypto];
-  const r = await fetch(`https://api.coinbase.com/v2/prices/${pair}/spot`);
-  const j = await r.json();
-  return (PRICE_USD / parseFloat(j.data.amount)).toFixed(8);
+  try {
+    const r = await fetch(`https://api.coinbase.com/v2/prices/${pair}/spot`);
+    const j = await r.json();
+    return (PRICE_USD / parseFloat(j.data.amount)).toFixed(8);
+  } catch(e){ return "0.00000000"; }
 }
 
 /* ============================= */
 /* INIT PAY PAGE */
 /* ============================= */
-(async function () {
+(async function(){
   const orderId = getParam("orderId");
-  if (!orderId) { location.href = "index.html"; return; }
+  if(!orderId){ location.href="index.html"; return; }
 
   const order = await fetchOrder(orderId);
-  if (!order) { location.href = "expired.html"; return; }
+  if(!order){ location.href="expired.html"; return; }
 
   const { crypto, createdAt } = order;
+  if(!createdAt){ location.href="expired.html"; return; }
 
   // Header
   document.getElementById("orderId").innerText = orderId;
   document.getElementById("title").innerText = `Pay with ${crypto}`;
-  if (cryptoMeta[crypto]) {
+  if(cryptoMeta[crypto]){
     document.getElementById("cryptoLogo").src = cryptoMeta[crypto].logo;
     document.getElementById("cryptoName").innerText = cryptoMeta[crypto].name;
   }
@@ -84,33 +87,33 @@ async function getCryptoAmount(crypto) {
   document.getElementById("amount").innerText = `Send exactly ${amount} ${crypto} (≈ $${PRICE_USD})`;
 
   // Copy address
-  document.getElementById("copyBtn").onclick = async () => {
-    try { await navigator.clipboard.writeText(wallets[crypto]); alert("Address copied!"); }
+  document.getElementById("copyBtn").onclick = async ()=>{
+    try{ await navigator.clipboard.writeText(wallets[crypto]); alert("Address copied!"); }
     catch(e){ alert("Copy failed. Please copy manually."); }
   };
 
   // Timer
   const EXPIRE_SECONDS = 1200;
-  const expiresAt = createdAt + EXPIRE_SECONDS * 1000;
+  const expiresAt = createdAt + EXPIRE_SECONDS*1000;
   const timerEl = document.getElementById("timer");
-  function updateTimer() {
-    const left = Math.floor((expiresAt - Date.now()) / 1000);
-    if (left <= 0) { location.href = "expired.html"; return; }
-    const m = Math.floor(left / 60), s = left % 60;
+
+  function updateTimer(){
+    const left = Math.floor((expiresAt - Date.now())/1000);
+    if(left <=0){ location.href="expired.html"; return; }
+    const m = Math.floor(left/60), s=left%60;
     timerEl.innerText = `${m}:${String(s).padStart(2,"0")}`;
   }
-  updateTimer();
-  setInterval(updateTimer, 1000);
 
-  // -------------------------
-  // Submit TXID
-  // -------------------------
-  window.submitTxid = async function() {
+  updateTimer();
+  setInterval(updateTimer,1000);
+
+  // TXID submit
+  window.submitTxid = async function(){
     const txid = document.getElementById("txidInput").value.trim();
     if(!txid){ alert("Please enter your TXID."); return; }
 
-    try {
-      const r = await fetch(`${WORKER_URL}/verify-txid`, {
+    try{
+      const r = await fetch(`${WORKER_URL}/verify-txid`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ orderId, txid })
@@ -122,9 +125,7 @@ async function getCryptoAmount(crypto) {
       } else {
         alert("Payment not confirmed yet. Please wait for confirmations.");
       }
-    } catch(e){
-      alert("Error verifying payment.");
-    }
+    } catch(e){ alert("Error verifying payment."); }
   };
 
 })();
