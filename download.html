@@ -7,53 +7,49 @@
 </head>
 <body>
 <div class="box">
-  <h2>Download</h2>
+  <h2>📥 Download</h2>
   <p id="msg">Verifying your order...</p>
   <a id="fileLink" href="#" style="display:none;" download>Download File</a>
 </div>
 
 <script>
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // ton Worker
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
 const params = new URLSearchParams(window.location.search);
 const orderId = params.get("orderId");
 
 async function verifyOrder(){
   try{
-    const resp = await fetch(`${WORKER_URL}/admin/orders`);
-    const orders = await resp.json();
-    const order = orders.find(o => o.orderId === orderId);
-
-    if(!order){
-      document.getElementById("msg").innerText = "Order not found or expired.";
-      return;
-    }
+    // Récupérer l'ordre depuis worker
+    const resp = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
+    if(!resp.ok) throw "Order not found or expired";
+    const order = await resp.json();
 
     if(order.status !== "paid"){
       document.getElementById("msg").innerText = "Payment not confirmed yet.";
       return;
     }
 
-    // Anti-double
+    // Anti-double download
     if(order.downloaded){
-      document.getElementById("msg").innerText = "File already downloaded on another device.";
+      document.getElementById("msg").innerText = "File already downloaded on another device or IP.";
       return;
     }
 
-    // Génère lien unique
-    const link = "fichier.txt"; // fichier réel
+    // Générer lien unique
+    const link = "fichier.txt"; // ton fichier réel
     document.getElementById("fileLink").href = link;
     document.getElementById("fileLink").style.display = "inline-block";
     document.getElementById("msg").innerText = "Click the button to download your file.";
 
-    // Marque comme téléchargé
+    // Marquer comme téléchargé
     await fetch(`${WORKER_URL}/update-order`, {
       method:"POST",
       headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ orderId, downloaded:true })
+      body: JSON.stringify({ orderId })
     });
 
   }catch(e){
-    document.getElementById("msg").innerText = "Error verifying order.";
+    document.getElementById("msg").innerText = "Error verifying order or link expired.";
   }
 }
 
