@@ -1,41 +1,26 @@
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // 🔴 À REMPLACER
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
 
-// Conversion code pays → nom complet
+/* ========================= */
+/* COUNTRY MAP */
+/* ========================= */
 const COUNTRY_NAMES = {
-  FR: "France",
-  US: "United States",
-  CA: "Canada",
-  GB: "United Kingdom",
-  DE: "Germany",
-  ES: "Spain",
-  IT: "Italy",
-  BE: "Belgium",
-  CH: "Switzerland",
-  MA: "Morocco",
-  DZ: "Algeria",
-  TN: "Tunisia",
-  SN: "Senegal",
-  CI: "Ivory Coast",
-  CM: "Cameroon",
-  NG: "Nigeria",
-  BR: "Brazil",
-  IN: "India",
-  CN: "China",
-  RU: "Russia",
-  JP: "Japan"
-  // ➜ autres ajoutables si besoin
+  FR: "France", US: "United States", CA: "Canada", GB: "United Kingdom",
+  DE: "Germany", ES: "Spain", IT: "Italy", BE: "Belgium", CH: "Switzerland",
+  MA: "Morocco", DZ: "Algeria", TN: "Tunisia", SN: "Senegal",
+  CI: "Ivory Coast", CM: "Cameroon", NG: "Nigeria",
+  BR: "Brazil", IN: "India", CN: "China", RU: "Russia", JP: "Japan"
 };
 
-function getCountryName(code) {
-  if (!code) return "-";
-  return COUNTRY_NAMES[code] || code;
+function countryName(code) {
+  return COUNTRY_NAMES[code] || code || "-";
 }
 
-// ============================
-// LOGIN
-// ============================
+/* ========================= */
+/* LOGIN */
+/* ========================= */
 async function login() {
-  const pin = document.getElementById("pin").value;
+  const pin = document.getElementById("pin").value.trim();
+  if (!pin) return alert("PIN requis");
 
   const res = await fetch(WORKER_URL + "/admin/login", {
     method: "POST",
@@ -55,17 +40,18 @@ async function login() {
   document.getElementById("adminBox").style.display = "block";
 
   loadOrders();
+  setInterval(loadOrders, 15000); // auto refresh
 }
 
-// ============================
-// LOAD ORDERS
-// ============================
+/* ========================= */
+/* LOAD ORDERS */
+/* ========================= */
 async function loadOrders() {
   const token = localStorage.getItem("adminToken");
   if (!token) return;
 
   const res = await fetch(WORKER_URL + "/admin/orders", {
-    headers: { "Authorization": "Bearer " + token }
+    headers: { Authorization: "Bearer " + token }
   });
 
   if (!res.ok) {
@@ -79,6 +65,9 @@ async function loadOrders() {
   const tbody = document.querySelector("#ordersTable tbody");
   tbody.innerHTML = "";
 
+  // Tri par date décroissante
+  orders.sort((a, b) => b.createdAt - a.createdAt);
+
   orders.forEach(o => {
     const tr = document.createElement("tr");
 
@@ -91,11 +80,11 @@ async function loadOrders() {
       <td>${o.orderId}</td>
       <td>${o.email}</td>
       <td>${o.crypto}</td>
-      <td>${o.amountUSD}</td>
+      <td>$${o.amountUSD}</td>
       <td class="${statusClass}">${o.status}</td>
-      <td>${o.txid || "-"}</td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${o.txid || "-"}</td>
       <td>${o.ip || "-"}</td>
-      <td>${getCountryName(o.country)}</td>
+      <td>${countryName(o.country)}</td>
       <td>${new Date(o.createdAt).toLocaleString()}</td>
       <td>${o.paidAt ? new Date(o.paidAt).toLocaleString() : "-"}</td>
     `;
