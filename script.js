@@ -37,7 +37,7 @@ function getParam(name) { return new URLSearchParams(window.location.search).get
 /* ============================= */
 async function fetchOrder(orderId) {
   try {
-    const r = await fetch(`${WORKER_URL}/get-order?orderId=${orderId}`);
+    const r = await fetch(`${WORKER_URL}/public/order?orderId=${orderId}`);
     if(!r.ok) return null;
     return await r.json();
   } catch(e) { return null; }
