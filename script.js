@@ -74,7 +74,8 @@ async function getCryptoAmount(crypto){
   const order = await fetchOrder(orderId);
   if(!order){ location.href="expired.html"; return; }
 
-  const { crypto, createdAt, expiresAt } = order;
+  const { crypto, createdAt } = order;
+  const expiresAt = order.expiresAt || (createdAt + 20*60*1000); // fallback TTL 20 min
 
   // Header
   document.getElementById("orderId").innerText = orderId;
@@ -128,6 +129,9 @@ async function getCryptoAmount(crypto){
       if(j.ok && j.paid){
         alert("Payment confirmed!");
         window.location.href = `success.html?orderId=${orderId}`;
+      } else if(j.expired){
+        alert("Order expired!");
+        location.href = "expired.html";
       } else {
         alert("Payment not confirmed yet. Please wait for confirmations.");
       }
