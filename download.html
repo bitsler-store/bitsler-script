@@ -6,10 +6,11 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="box">
   <h2>📥 Download</h2>
   <p id="msg">Verifying your order...</p>
-  <a id="fileLink" href="#" style="display:none;" download>Download File</a>
+  <button id="downloadBtn" style="display:none;">Download File</button>
 </div>
 
 <script>
@@ -17,49 +18,36 @@ const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
 const params = new URLSearchParams(window.location.search);
 const orderId = params.get("orderId");
 
-async function verifyOrder(){
-  try{
-    const resp = await fetch(`${WORKER_URL}/public/order?orderId=${orderId}`);
-    if(!resp.ok) throw "Order not found or expired";
-    const order = await resp.json();
+const msg = document.getElementById("msg");
+const btn = document.getElementById("downloadBtn");
 
-    if(order.status !== "paid"){
-      document.getElementById("msg").innerText = "Payment not confirmed yet.";
+async function verifyOrder() {
+  try {
+    const res = await fetch(`${WORKER_URL}/public/order?orderId=${orderId}`);
+    if (!res.ok) throw "Order not found";
+
+    const order = await res.json();
+
+    if (order.status !== "paid") {
+      msg.innerText = "❌ Payment not confirmed.";
       return;
     }
 
-    if(order.downloaded){
-      document.getElementById("msg").innerText = "File already downloaded on another device or IP.";
-      return;
-    }
+    msg.innerText = "✅ Order verified. You can download your file.";
+    btn.style.display = "inline-block";
 
-    const link = "fichier.txt"; // ton fichier réel
-    document.getElementById("fileLink").href = link;
-    document.getElementById("fileLink").style.display = "inline-block";
-    document.getElementById("msg").innerText = "Click the button to download your file.";
+    btn.onclick = () => {
+      // 🔒 téléchargement UNIQUEMENT via le worker
+      window.location.href = `${WORKER_URL}/download-file?orderId=${orderId}`;
+    };
 
-    // Marquer comme téléchargé
-    const HMAC_SECRET = "6f93a9f24c8b8c91e8e2aaf3d7c1b5f49d29a0e8d3b2a1f9c7e6d4b3a2f1e9c";
-    const body = { orderId };
-    const key = await crypto.subtle.importKey(
-      "raw", new TextEncoder().encode(HMAC_SECRET),
-      { name:"HMAC", hash:"SHA-256" }, false, ["sign"]
-    );
-    const sigBuf = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(JSON.stringify(body)));
-    const signature = btoa(String.fromCharCode(...new Uint8Array(sigBuf)));
-
-    await fetch(`${WORKER_URL}/mark-downloaded`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json","X-Signature":signature},
-      body: JSON.stringify(body)
-    });
-
-  } catch(e){
-    document.getElementById("msg").innerText = "Error verifying order or link expired.";
+  } catch (e) {
+    msg.innerText = "❌ Order invalid or expired.";
   }
 }
 
 verifyOrder();
 </script>
+
 </body>
 </html>
