@@ -19,8 +19,7 @@ const orderId = params.get("orderId");
 
 async function verifyOrder(){
   try{
-    // Récupérer l'ordre depuis worker
-    const resp = await fetch(`${WORKER_URL}/public/order?orderId=${orderId}`)
+    const resp = await fetch(`${WORKER_URL}/public/order?orderId=${orderId}`);
     if(!resp.ok) throw "Order not found or expired";
     const order = await resp.json();
 
@@ -29,26 +28,33 @@ async function verifyOrder(){
       return;
     }
 
-    // Anti-double download
     if(order.downloaded){
       document.getElementById("msg").innerText = "File already downloaded on another device or IP.";
       return;
     }
 
-    // Générer lien unique
     const link = "fichier.txt"; // ton fichier réel
     document.getElementById("fileLink").href = link;
     document.getElementById("fileLink").style.display = "inline-block";
     document.getElementById("msg").innerText = "Click the button to download your file.";
 
     // Marquer comme téléchargé
-    await fetch(`${WORKER_URL}/mark-downloaded`, {
+    const HMAC_SECRET = "6f93a9f24c8b8c91e8e2aaf3d7c1b5f49d29a0e8d3b2a1f9c7e6d4b3a2f1e9c";
+    const body = { orderId };
+    const key = await crypto.subtle.importKey(
+      "raw", new TextEncoder().encode(HMAC_SECRET),
+      { name:"HMAC", hash:"SHA-256" }, false, ["sign"]
+    );
+    const sigBuf = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(JSON.stringify(body)));
+    const signature = btoa(String.fromCharCode(...new Uint8Array(sigBuf)));
+
+    await fetch(`${WORKER_URL}/mark-downloaded`,{
       method:"POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ orderId })
+      headers:{"Content-Type":"application/json","X-Signature":signature},
+      body: JSON.stringify(body)
     });
 
-  }catch(e){
+  } catch(e){
     document.getElementById("msg").innerText = "Error verifying order or link expired.";
   }
 }
