@@ -8,7 +8,14 @@ const COUNTRY_NAMES = {
   DE: "Germany", ES: "Spain", IT: "Italy", BE: "Belgium", CH: "Switzerland",
   MA: "Morocco", DZ: "Algeria", TN: "Tunisia", SN: "Senegal",
   CI: "Ivory Coast", CM: "Cameroon", NG: "Nigeria",
-  BR: "Brazil", IN: "India", CN: "China", RU: "Russia", JP: "Japan"
+  BR: "Brazil", IN: "India", CN: "China", RU: "Russia", JP: "Japan",
+  AF: "Afghanistan", ZA: "Afrique du Sud", AL: "Albanie",
+  AO: "Angola", SA: "Arabie Saoudite", AR: "Argentine", AU: "Australie",
+  AT: "Autriche", AZ: "Azerbaïdjan", BS: "Bahamas", BHL: "Bahrein",
+  BD: "Bangladesh",  	BY: "Bélarus", BJ: "Bénin",  	BO: "Bolivie",
+  BW: "Botswana", BG: "Bulgarie",  	BF: "Burkina Faso", BI: "Burundi",
+  KH: "Cambodge", CL: "Chili", CY: "Chypre", CO: "Colombie", KM: "Comores",
+  
 };
 
 function countryName(code) {
