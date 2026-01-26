@@ -133,7 +133,7 @@ async function getCryptoAmount(crypto){
         alert("Order expired!");
         location.href = "expired.html";
       } else {
-        alert("Payment not confirmed yet. Please wait for confirmations.");
+        alert("Payment not yet confirmed. Please wait for confirmations.");
       }
     } catch(e){ alert("Error verifying payment."); }
   };
