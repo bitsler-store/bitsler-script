@@ -79,7 +79,8 @@ async function getCryptoAmount(crypto){
 
   // Header
   document.getElementById("orderId").innerText = orderId;
-  document.getElementById("title").innerText = `Pay with ${crypto}`;
+  const displayName = crypto.startsWith("USDT") ? "USDT" : crypto;
+document.getElementById("title").innerText = `Pay with ${displayName}`;
   if(cryptoMeta[crypto]){
     document.getElementById("cryptoLogo").src = cryptoMeta[crypto].logo;
     document.getElementById("cryptoName").innerText = cryptoMeta[crypto].name;
