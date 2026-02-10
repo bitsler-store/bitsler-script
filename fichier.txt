@@ -47,9 +47,9 @@ function applyValues() {
     );
     if (
       csEl &&
-      csEl.textContent !== Number(csValue).toFixed(3)
+      csEl.textContent !== Number(csValue).toFixed(8)
     ) {
-      csEl.textContent = Number(csValue).toFixed(3);
+      csEl.textContent = Number(csValue).toFixed(8);
     }
   }
 }
@@ -202,3 +202,4 @@ function speakActivated() {
 // Exemple : après l’exécution de ton code
 // tonCode();
 speakActivated();
+
