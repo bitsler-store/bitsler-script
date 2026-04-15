@@ -15,12 +15,12 @@ const wallets = {
 /* ============================= */
 /* CRYPTO LOGOS */
 const cryptoMeta = {
-  BTC: { name: "Bitcoin (BTC)", logo: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" },
-  ETH: { name: "Ethereum (ETH)", logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025" },
-  LTC: { name: "Litecoin (LTC)", logo: "https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=025" },
-  DOGE: { name: "Dogecoin (DOGE)", logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025" },
-  USDT_TRC20: { name: "USDT (TRC20)", logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025" },
-  USDT_BEP20: { name: "USDT (BEP20)", logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025" }
+  BTC: { name: "Bitcoin (BTC)", logo: "https://cryptologos.cc/logos/bitcoin-btc-logo.png" },
+  ETH: { name: "Ethereum (ETH)", logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png" },
+  LTC: { name: "Litecoin (LTC)", logo: "https://cryptologos.cc/logos/litecoin-ltc-logo.png" },
+  DOGE: { name: "Dogecoin (DOGE)", logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png" },
+  USDT_TRC20: { name: "USDT (TRC20)", logo: "https://cryptologos.cc/logos/tether-usdt-logo.png" },
+  USDT_BEP20: { name: "USDT (BEP20)", logo: "https://cryptologos.cc/logos/tether-usdt-logo.png" }
 };
 
 /* ============================= */
