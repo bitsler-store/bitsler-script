@@ -15,7 +15,7 @@ const wallets = {
 /* ============================= */
 /* CRYPTO LOGOS */
 const cryptoMeta = {
-  BTC: { name: "Bitcoin (BTC)", logo: "https://cryptologos.cc/logos/bitcoin-btc-logo.png" },
+  BTC: { name: "Bitcoin (BTC)", logo: "https://imgur.com/a/btc-mwVMlXI" },
   ETH: { name: "Ethereum (ETH)", logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png" },
   LTC: { name: "Litecoin (LTC)", logo: "https://cryptologos.cc/logos/litecoin-ltc-logo.png" },
   DOGE: { name: "Dogecoin (DOGE)", logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png" },
